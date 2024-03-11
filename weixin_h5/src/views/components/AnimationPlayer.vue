@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-11 17:50:21
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-11 23:15:51
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -11,6 +11,7 @@ import img2 from "../../assets/img2.png";
 import img3 from "../../assets/img3.jpg";
 import img4 from "../../assets/img4.png";
 import img5 from "../../assets/img5.png";
+import "@/../node_modules/animate.css/animate.css";
 
 const imgLsit = ref([img1, img2, img3, img4, img5]);
 const index = ref(0);
@@ -35,7 +36,12 @@ onMounted(() => {
 
 <template>
   <main>
-    <img class="img cssanimate__zoomIn" :src="imgLsit[index]" alt="Image" @click="play" />
+    <img
+      class="img animate__animated animate__zoomIn"
+      :src="imgLsit[index]"
+      alt="Image"
+      @click="play"
+    />
   </main>
 </template>
 
