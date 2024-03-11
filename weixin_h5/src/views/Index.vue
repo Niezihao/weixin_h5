@@ -1,11 +1,12 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-10 17:26:44
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-11 17:11:43
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance } from "vue";
+import AnimationPlayer from "./components/AnimationPlayer.vue";
 
 const { proxy } = getCurrentInstance(); //来获取全局 globalProperties 中配置的信息
 const headimgurl = ref("");
@@ -49,13 +50,14 @@ function toLogin() {
 
 onMounted(() => {
   console.log("onMounted");
-  toLogin();
+  // toLogin();
 });
 </script>
 
 <template>
   <main>
-    <img :src="currentImage" alt="Image" />
+    <AnimationPlayer></AnimationPlayer>
+    <!-- <img :src="currentImage" alt="Image" /> -->
     <!-- <button @click="toLogin">登录</button>
     {{ nickname }}
     <img :src="headimgurl" alt="" />
