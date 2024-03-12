@@ -1,11 +1,11 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-11 17:11:43
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-12 23:13:58
 -->
 <script setup>
-import { ref, onMounted, getCurrentInstance } from "vue";
+import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import AnimationPlayer from "./components/AnimationPlayer.vue";
 
 const { proxy } = getCurrentInstance(); //来获取全局 globalProperties 中配置的信息
@@ -14,7 +14,6 @@ const nickname = ref("");
 
 async function getCode() {
   const res = await proxy.$axios.get("/getCode");
-  console.log("res", res);
   if (res) {
     window.location.href = res;
   }
@@ -47,22 +46,32 @@ function toLogin() {
     getCode();
   }
 }
-
+const isWeixin = computed(() => {
+  let ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf("micromessenger") != -1;
+});
 onMounted(() => {
   console.log("onMounted");
+  console.log(isWeixin.value);
   // toLogin();
 });
 </script>
 
 <template>
   <main>
-    <AnimationPlayer></AnimationPlayer>
-    <!-- <img :src="currentImage" alt="Image" /> -->
-    <!-- <button @click="toLogin">登录</button>
-    {{ nickname }}
-    <img :src="headimgurl" alt="" />
-    <div>
-      {{ nickname }}
-    </div> -->
+    <div v-if="!isWeixin" class="toTip">请在微信客户端打开</div>
+
+    <AnimationPlayer v-else></AnimationPlayer>
   </main>
 </template>
+
+<style scoped>
+.toTip {
+  position: relative;
+  width: 300px;
+  top: 200px;
+  left: 50%;
+  transform: translate(-150px);
+  font-size: 30px;
+}
+</style>
