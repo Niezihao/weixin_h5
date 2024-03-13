@@ -1,0 +1,10 @@
+node_modules
+dist
+unpackage
+dist-ssr
+*.local
+backup
+.svn
+.vscode/tasks.json
+
+stats.html
