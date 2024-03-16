@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-13 23:17:43
+ * @LastEditTime: 2024-03-17 02:49:09
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -59,7 +59,7 @@ onMounted(() => {
 
 <template>
   <main>
-    <div v-if="isWeixin" class="toTip">请在微信客户端打开</div>
+    <div v-if="!isWeixin" class="toTip">请在微信客户端打开</div>
 
     <AnimationPlayer v-else></AnimationPlayer>
   </main>

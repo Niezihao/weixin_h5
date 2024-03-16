@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-14 00:23:08
+ * @LastEditTime: 2024-03-17 02:21:34
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index.vue'
@@ -24,6 +24,26 @@ const router = createRouter({
       path: '/createPicture',
       name: 'createPicture',
       component: () => import('../views/createPicture.vue')
+    },
+    {
+      path: '/win',
+      name: 'win',
+      component: () => import('../views/win.vue')
+    },
+    {
+      path: '/discount',
+      name: 'discount',
+      component: () => import('../views/discount.vue')
+    },
+    {
+      path: '/wirteAddress',
+      name: 'wirteAddress',
+      component: () => import('../views/wirteAddress.vue')
+    },
+    {
+      path: '/myGift',
+      name: 'myGift',
+      component: () => import('../views/myGift.vue')
     }
   ]
 })

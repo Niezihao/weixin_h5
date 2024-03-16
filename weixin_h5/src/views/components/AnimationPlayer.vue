@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-14 00:20:55
+ * @LastEditTime: 2024-03-16 22:48:44
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -28,7 +28,7 @@ function play() {
     } else {
       index.value++;
     }
-  }, 1000);
+  }, 1500);
 }
 
 onMounted(() => {
@@ -42,7 +42,7 @@ onMounted(() => {
       class="img animate__animated animate__zoomIn"
       :src="imgLsit[index]"
       alt="Image"
-      @click="play"
+      @click.once="play"
     />
   </main>
 </template>
