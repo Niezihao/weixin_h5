@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-16 22:48:44
+ * @LastEditTime: 2024-03-19 00:34:41
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -13,12 +13,16 @@ import img4 from "../../assets/img4.png";
 import img5 from "../../assets/img5.png";
 import "@/../node_modules/animate.css/animate.css";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 const imgLsit = ref([img1, img2, img3, img4, img5]);
 const index = ref(0);
 const router = useRouter();
 
 function play() {
+  store.commit("setMusicInfo", { playing: true });
   if (index.value !== 0) return;
 
   const timer = setInterval(() => {
