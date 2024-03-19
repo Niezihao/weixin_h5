@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-11 22:48:13
+ * @LastEditTime: 2024-03-20 00:57:24
  */
 import { fileURLToPath, URL } from 'node:url'
 
@@ -28,6 +28,12 @@ export default defineConfig({
         // target: 'http://192.168.110.29:3000',	//实际请求地址
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/cgi-bin': {
+        target: 'https://api.weixin.qq.com',	//实际请求地址
+        // target: 'http://192.168.110.29:3000',	//实际请求地址
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cgi-bin/, '')
       },
     }
   }
