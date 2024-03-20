@@ -1,12 +1,12 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-18 23:09:27
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-19 22:50:42
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-20 17:00:08
 -->
 <template>
   <div>
-    <audio ref="audioRef" src="../../public/69024145189042239.mp3"></audio>
+    <audio ref="audioRef" src="../../public/麻烦星球 音乐loop - 2 -.wav" loop></audio>
   </div>
 </template>
 

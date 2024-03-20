@@ -1,20 +1,20 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-13 00:27:06
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-20 01:02:12
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-20 17:47:08
  */
 import axios from "axios";
 let appid = 'wx2a2b14d1eab2ae9d'
 let appsecret = '1c8cecdfac1b69209a750d7d67bdf47c'
-axios.get("/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + appsecret).then((res) => {
-    console.log(res);
-    if (res) {
-        "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + accessToken + "&type=jsapi"
-    }
-})
+// axios.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + appsecret).then((res) => {
+//     console.log(res);
+//     if (res) {
+//         "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + accessToken + "&type=jsapi"
+//     }
+// })
 // https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx2a2b14d1eab2ae9d&secret=1c8cecdfac1b69209a750d7d67bdf47c
-
+axios.get('/getTicket')
 let timestamp = Math.floor(Date.now() / 1000)
 let nonceStr = Math.random()
 let url = `${location.origin}${location.pathname}${location.search}`

@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-09 20:20:58
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-10 23:53:36
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-20 17:33:40
  * @FilePath: \server\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -19,7 +19,17 @@ app.use(cors())
 app.get('/', async (req, res) => {
     res.send('ok')
 })
+// 获取jssdk的Ticket
+app.get('/getTicket', async (req, res) => {
+    let token = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${process.env.APPID}&secret=${process.env.APPSECRET}`
+    let accessToken = (await axios.get(token)).data.access_token
+    console.log(accessToken);
+    let getTicket = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${accessToken}&type=jsapi`
+    let ticket  = (await axios.get(getTicket)).data
+    res.send(ticket)
+})
 
+// 网页授权登录
 app.get('/getCode', async (req, res) => {
     let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${process.env.APPID}&redirect_uri=${encodeURIComponent(process.env.REDUCE_URL)}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
     res.send(url)

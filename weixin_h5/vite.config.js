@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-20 00:57:24
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-20 18:24:44
  */
 import { fileURLToPath, URL } from 'node:url'
 
@@ -20,21 +20,15 @@ export default defineConfig({
     }
   },
   server: { //主要是加上这段代码
-    host: '192.168.110.29',
-    port: 8000,
+    // host: '192.168.110.29',
+    // port: 8000,
     proxy: {
       '/api': {
         target: 'http://8.138.131.112:3000',	//实际请求地址
         // target: 'http://192.168.110.29:3000',	//实际请求地址
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
-      },
-      '/cgi-bin': {
-        target: 'https://api.weixin.qq.com',	//实际请求地址
-        // target: 'http://192.168.110.29:3000',	//实际请求地址
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/cgi-bin/, '')
-      },
+      }
     }
   }
 })
