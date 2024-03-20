@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-17 02:48:09
+ * @LastEditTime: 2024-03-21 00:44:36
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed, nextTick } from "vue";
@@ -28,6 +28,8 @@ import sucai15 from "../assets/sucai/风格3-3.png";
 import sucai16 from "../assets/sucai/风格3-4.png";
 import sucai17 from "../assets/sucai/风格3-5.png";
 import sucai18 from "../assets/sucai/风格3-6.png";
+import sucai19 from "../assets/sucai/风格3-7.png";
+import sucai20 from "../assets/sucai/风格3-8.png";
 import img1 from "../assets/sucai/插画1.png";
 import img2 from "../assets/sucai/插画2.png";
 import img3 from "../assets/sucai/插画3.png";
@@ -67,6 +69,8 @@ const sucaiList = ref([
   sucai16,
   sucai17,
   sucai18,
+  sucai19,
+  sucai20,
 ]);
 const hasPicture = ref(false);
 
@@ -213,13 +217,7 @@ function download() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-
-  const randomValue = Math.random();
-  if (randomValue < 0.98) {
-    router.push("/discount");
-  } else {
-    router.push("/win");
-  }
+  router.push("/savePicture");
 }
 
 function share() {
@@ -289,6 +287,7 @@ function share() {
         />
         <img class="imgs" src="../assets/share_btn.png" alt="" @click="share" />
       </div>
+      <img class="bottom" src="../assets/icon/bottom.png" alt="" />
     </div>
   </div>
 </template>
@@ -360,11 +359,11 @@ function share() {
   background: #1c2642;
 }
 .imgs {
-  width: 120px;
-  height: 40px;
+  width: 140px;
+  height: 45px;
 }
 .flex {
-  height: 100%;
+  height: 80%;
   display: flex;
   justify-content: space-around;
   align-items: center; /* 沿交叉轴（垂直方向）居中 */
@@ -375,5 +374,11 @@ function share() {
   border-radius: 10px;
   // background: #ffffff;
   margin: 0 15px;
+}
+.bottom {
+  position: absolute;
+  left: 24%;
+  bottom: 5%;
+  transform: scale(0.7);
 }
 </style>

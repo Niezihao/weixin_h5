@@ -2,13 +2,13 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-19 23:11:28
+ * @LastEditTime: 2024-03-21 00:12:57
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
 
-const show = ref(false);
+const show = ref(true);
 const router = useRouter();
 
 function go() {
@@ -56,7 +56,7 @@ onMounted(() => {});
 .myGift {
   position: absolute;
   width: 35vw;
-  height: 5vh;
+  height: 6vh;
   top: 86.5vh;
   left: 15vw;
   /* transform: translate(5vw); */
@@ -64,7 +64,7 @@ onMounted(() => {});
 .roles {
   position: absolute;
   width: 35vw;
-  height: 5vh;
+  height: 6vh;
   top: 86.5vh;
   left: 50%;
   /* transform: translate(px); */
@@ -76,8 +76,8 @@ onMounted(() => {});
 .btn {
   position: absolute;
   width: 70vw;
-  height: 6vh;
-  top: 80vh;
+  height: 7vh;
+  top: 79vh;
   left: 50%;
   transform: translate(-35vw);
 }

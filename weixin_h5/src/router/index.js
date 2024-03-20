@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-17 02:21:34
+ * @LastEditTime: 2024-03-21 00:25:07
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index.vue'
@@ -44,6 +44,16 @@ const router = createRouter({
       path: '/myGift',
       name: 'myGift',
       component: () => import('../views/myGift.vue')
+    },
+    {
+      path: '/giftIndex',
+      name: 'giftIndex',
+      component: () => import('../views/giftIndex.vue')
+    },
+    {
+      path: '/savePicture',
+      name: 'savePicture',
+      component: () => import('../views/savePicture.vue')
     }
   ]
 })
