@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 00:12:57
+ * @LastEditTime: 2024-03-22 01:11:18
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -41,8 +41,19 @@ onMounted(() => {});
     </div>
 
     <van-popup v-model:show="show">
-      <img class="img_tip" src="../assets/tip.png" alt=""
-    /></van-popup>
+      <div style="position: relative">
+        <img class="img_tip" src="../assets/tip.png" alt="" />
+        <div
+          style="
+            position: absolute;
+            width: 8vw;
+            height: 4vh;
+            top: 1vh;
+            right: 2vw;
+          "
+          @click="show = false"
+        ></div></div
+    ></van-popup>
   </main>
 </template>
 
@@ -70,8 +81,7 @@ onMounted(() => {});
   /* transform: translate(px); */
 }
 .img_tip {
-  /* width: 100%;
-  height: 100%; */
+  width: 70vw;
 }
 .btn {
   position: absolute;

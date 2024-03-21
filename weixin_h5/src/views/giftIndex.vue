@@ -2,11 +2,12 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 00:27:32
+ * @LastEditTime: 2024-03-21 22:40:55
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 
 const router = useRouter();
 
@@ -16,13 +17,17 @@ function goGift() {
 function goBack() {
   router.push("/wirteAddress");
 }
-function lottery() {
-  console.log(11);
-  const randomValue = Math.random();
-  if (randomValue < 0.98) {
-    router.push("/discount");
+async function lottery() {
+  const res = await axios.get("users/box-number");
+  if (res && res.data && res.data.count <= 45) {
+    const randomValue = Math.random();
+    if (randomValue < 0.98) {
+      router.push("/discount");
+    } else {
+      router.push("/win");
+    }
   } else {
-    router.push("/win");
+    router.push("/discount");
   }
 }
 </script>

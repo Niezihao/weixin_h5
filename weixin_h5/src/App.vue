@@ -2,16 +2,19 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-19 00:39:19
+ * @LastEditTime: 2024-03-21 22:54:23
  * @FilePath: \weixin_h5\src\App.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, getCurrentInstance } from "vue";
 import { RouterView } from "vue-router";
 import GlobalAudio from "./views/GlobalAudio.vue";
 import { useStore } from "vuex";
+import axios from "axios";
+import { wechatConfig } from "./wechatSdk.js";
 
+const { proxy } = getCurrentInstance();
 const store = useStore();
 const globalAudio = ref();
 
@@ -22,6 +25,19 @@ watch(
     globalAudio.value.play();
   }
 );
+onMounted(async () => {
+  wechatConfig(
+    proxy,
+    "分享标题",
+    "分享描述",
+    "分享链接",
+    "分享封面（配图）"
+  ).then((res) => {
+    //需要获取方法执行结果，可以加.then这一段；
+    //不需要可以不加
+  });
+  await axios.put("/log/update");
+});
 </script>
 
 <template>

@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 00:44:36
+ * @LastEditTime: 2024-03-22 01:03:50
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed, nextTick } from "vue";
@@ -211,8 +211,9 @@ function download() {
     top: 0,
     format: "png",
   });
+  sessionStorage.setItem("picture", dataURL);
   const link = document.createElement("a");
-  link.download = "通行证.png";
+  link.download = "星球通行证.png";
   link.href = dataURL;
   document.body.appendChild(link);
   link.click();

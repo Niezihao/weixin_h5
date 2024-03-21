@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-20 00:37:18
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-20 00:43:44
+ * @LastEditTime: 2024-03-21 23:23:26
  */
 
 // import { wechatConfig } from "@/utils/wechatSdk.js";
@@ -17,19 +17,15 @@
 //         //不需要可以不加
 //       });
 
-import {
-    getWechatConfig
-} from "./common.js";  //为你提供timestamp、nonceStr、signature的后端接口
+// import {
+//     getWechatConfig
+// } from "./common.js";  //为你提供timestamp、nonceStr、signature的后端接口
+import axios from "axios"
 
-let timestamp = Math.floor(Date.now() / 1000)
-let nonceStr = Math.random()
-let url = `${location.origin}${location.pathname}${location.search}`
+function getWechatConfig(url) {
+    return axios.get(`/users/getSignature?url=${url}`)
+}
 
-let jsapi_ticket = document.querySelector('.vats .jsapi_ticket').innerHTML
-
-
-
-let sig = sha1(`jsapi_ticket=${jsapi_ticket}&nonceStr=${nonceStr}&timestamp=${timestamp}&url=${url}`)
 
 const APPID = "wx2a2b14d1eab2ae9d"; //公众号的appId
 
@@ -43,18 +39,20 @@ const APPID = "wx2a2b14d1eab2ae9d"; //公众号的appId
  * @returns 
  */
 export const wechatConfig = (tag, share_title, share_desc, share_link, share_cover) => {
-    var wx_host = window.location.href.split('#')[0]; //后端获取签名，需要前端传url，url要求看注解
+    // var wx_host = window.location.href.split('#')[0];
+    let wx_host = `${location.origin}${location.pathname}${location.search}`
+    console.log('wx_host', wx_host); //后端获取签名，需要前端传url，url要求看注解
     const cover = share_cover || 'https://hbimg.huaban.com/a2a9a71b293f6664b342e0cefc6e1fccd5f921f83cfa5-RoYLU8_fw658/format/webp'; //不重要的默认图片地址
     return new Promise((resolve, reject) => {
         getWechatConfig(wx_host).then((res) => {
-            if (res.code == 200) {
-
+            if (res) {
+                console.log('res', res.data.signature);
                 const config = {
-                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                     appId: APPID, // 必填，公众号的唯一标识
-                    timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-                    nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-                    signature: res.data.signature, // 必填，签名
+                    timestamp: res.data.signature.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: res.data.signature.nonceStr, // 必填，生成签名的随机串
+                    signature: res.data.signature.signature, // 必填，签名
                     jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"], // 必填，需要使用的JS接口列表，注意查看官方文档，部分js接口即将废弃，我这里用的是新的
                     openTagList: ["wx-open-launch-weapp"], // 可选，需要使用的开放标签列表（当前标签用于跳转微信小程序）
                 };

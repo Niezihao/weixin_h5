@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:40:21
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-10 12:02:01
+ * @LastEditTime: 2024-03-21 22:33:04
  */
 import axios from "axios";
 import qs from "qs";
@@ -70,6 +70,21 @@ export default {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'get',
+                url,
+                params: data,
+            })
+                .then(res => {
+                    resolve(res.data)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    put(url, data) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: 'put',
                 url,
                 params: data,
             })
