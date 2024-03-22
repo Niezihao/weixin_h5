@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 22:23:17
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-22 14:25:45
  */
 import { fileURLToPath, URL } from 'node:url'
 
@@ -20,7 +20,7 @@ export default defineConfig({
     }
   },
   server: { //主要是加上这段代码
-    host: '192.168.110.29',
+    host: '0.0.0.0',
     port: 8000,
     proxy: {
       '/api': {

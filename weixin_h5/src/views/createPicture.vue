@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-22 01:03:50
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-22 17:55:47
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed, nextTick } from "vue";
@@ -33,6 +33,7 @@ import sucai20 from "../assets/sucai/风格3-8.png";
 import img1 from "../assets/sucai/插画1.png";
 import img2 from "../assets/sucai/插画2.png";
 import img3 from "../assets/sucai/插画3.png";
+import axios from "axios";
 
 let editorCanvas = "";
 let mc = "";
@@ -73,40 +74,45 @@ const sucaiList = ref([
   sucai20,
 ]);
 const hasPicture = ref(false);
+const bgC = ref('');
 
-function afterRead(file) {
-  console.log("file", file);
-  hasPicture.value = true;
-  nextTick(() => {
-    initCanvas();
-    editorCanvas.isDrawingMode = false;
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      let data = e.target.result;
-      fabric.Image.fromURL(data, (img) => {
-        img.scaleToWidth(canvasWidth);
-        img.scaleToHeight(canvasHeight);
-        editorCanvas.add(img).renderAll();
-      });
-    };
-    reader.readAsDataURL(file.file);
-    setBg();
-  });
-}
+// function afterRead(file) {
+//   console.log("file", file);
+//   hasPicture.value = true;
+//   nextTick(() => {
+//     initCanvas();
+//     editorCanvas.isDrawingMode = false;
+//     let reader = new FileReader();
+//     reader.onload = (e) => {
+//       let data = e.target.result;
+//       fabric.Image.fromURL(data, (img) => {
+//         img.scaleToWidth(canvasWidth);
+//         img.scaleToHeight(canvasHeight);
+//         editorCanvas.add(img).renderAll();
+//       });
+//     };
+//     reader.readAsDataURL(file.file);
+//     setBg();
+//   });
+// }
 
 function setBg() {
+  if(bgC.value){
+    editorCanvas.remove(bgC.value)
+    editorCanvas.renderAll()
+  }
   if (timer) {
     clearTimeout(timer);
   }
   timer = setTimeout(() => {
     nextTick(() => {
-      let bgC = fabric.Image.fromURL(bgImg.value, (img) => {
+       bgC.value = fabric.Image.fromURL(bgImg.value, (img) => {
         img.selectable = false;
         img.scaleToWidth(canvasWidth);
         img.scaleToHeight(canvasHeight);
         editorCanvas.add(img).renderAll();
       });
-      editorCanvas.bringToFront(bgC);
+      editorCanvas.bringToFront(bgC.value);
     });
   }, 200);
 }
@@ -212,17 +218,54 @@ function download() {
     format: "png",
   });
   sessionStorage.setItem("picture", dataURL);
-  const link = document.createElement("a");
-  link.download = "星球通行证.png";
-  link.href = dataURL;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // const link = document.createElement("a");
+  // link.download = "星球通行证.png";
+  // link.href = dataURL;
+  // document.body.appendChild(link);
+  // link.click();
+  // document.body.removeChild(link);
   router.push("/savePicture");
 }
 
 function share() {
   router.push("/page");
+}
+function afterRead(file) {
+  console.log(file);
+  file.status = "uploading";
+  file.message = "上传中...";
+  hasPicture.value = true;
+  nextTick(() => {
+    initCanvas();
+    editorCanvas.isDrawingMode = false;
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      let data = e.target.result;
+      fabric.Image.fromURL(data, (img) => {
+        img.scaleToWidth(canvasWidth);
+        img.scaleToHeight(canvasHeight);
+        editorCanvas.add(img).renderAll();
+      });
+    };
+    reader.readAsDataURL(file.file);
+    setBg();
+  });
+  // 上传到服务器
+  const formData = new FormData();
+  formData.append("file", file.file);
+  axios
+    .post("/resource/upload", formData)
+    .then((res) => {
+      const { path, filename } = res.data;
+      sessionStorage.setItem("fileName", filename);
+      file.url = path;
+      file.status = "success";
+      file.message = null;
+    })
+    .catch(() => {
+      file.status = "failed";
+      file.message = "上传失败";
+    });
 }
 </script>
 

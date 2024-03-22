@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-22 01:20:02
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-22 17:54:25
 -->
 
 <script setup>
@@ -15,6 +15,7 @@ const router = useRouter();
 const route = useRouter();
 const headimgurl = ref("");
 const nickname = ref("");
+const userdata = ref({});
 
 // 微信授权
 // async function getCode() {
@@ -54,9 +55,14 @@ const nickname = ref("");
 
 // 后台
 async function login() {
-  const res = await proxy.$axios.post("/users/login", {
-    openId: "",
-  });
+  if (userdata.value.curCusId) {
+    const res = await proxy.$axios.post("/users/login", {
+      openId: userdata.value.curCusId,
+    });
+    const userInfo = Object.assign(res, userdata.value);
+    console.log(userInfo);
+    sessionStorage.setItem("userInfo", userInfo);
+  }
 }
 
 // 判断是否微信浏览器环境
@@ -79,17 +85,44 @@ const isWeixin = computed(() => {
   // return ua.indexOf("micromessenger") != -1;
 });
 
+function getQueryParamsAsObject(url) {
+  // 如果没有提供URL，默认使用当前页面的URL
+  url = url || window.location.href;
+  // 解析URL以获取查询字符串部分
+  const queryString = url.split("?")[1];
+  // 如果没有查询字符串，返回空对象
+  if (!queryString) {
+    return {};
+  }
+  // 将查询字符串分割成键值对数组
+  const paramsArray = queryString.split("&");
+  // 创建一个空对象用来存储参数
+  const queryParams = {};
+  // 遍历键值对数组并填充对象
+  paramsArray.forEach((item) => {
+    const [key, value] = item.split("=");
+    queryParams[key] = decodeURIComponent(value); // 解码URI编码过的值
+  });
+  return queryParams;
+}
+
+// 使用示例
+const url = "https://example.com/?name=John&age=30";
+const paramsObject = getQueryParamsAsObject(url);
+console.log(paramsObject); // 输出：{ name: "John", age: "30" }
+
 onMounted(() => {
   console.log("onMounted");
   console.log(isWeixin.value);
   // toLogin();
-  console.log(route.query);
+  userdata.value = getQueryParamsAsObject();
+  login();
 });
 </script>
 
 <template>
   <main>
-    <div v-if="!isWeixin" class="toTip">请在微信客户端打开</div>
+    <div v-if="isWeixin" class="toTip">请在微信客户端打开</div>
 
     <AnimationPlayer v-else></AnimationPlayer>
     {{ route.query }}

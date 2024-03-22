@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 22:40:55
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-22 17:22:55
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -13,9 +13,6 @@ const router = useRouter();
 
 function goGift() {
   router.push("/myGift");
-}
-function goBack() {
-  router.push("/wirteAddress");
 }
 async function lottery() {
   const res = await axios.get("users/box-number");
@@ -30,17 +27,20 @@ async function lottery() {
     router.push("/discount");
   }
 }
+const imgUrl = computed(() => {
+  let fileName = sessionStorage.getItem("fileName");
+  return `${location.origin}/api/resource/static/${fileName}`;
+});
+const picture = computed(() => {
+  let picture = sessionStorage.getItem("picture");
+  return picture;
+});
 </script>
 
 <template>
   <div class="main">
     <!-- <img class="imgx" src="../assets/icon/x1.png" alt="" @click="goBack" /> -->
-    <img
-      class="img"
-      src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
-      alt=""
-      @click="goBack"
-    />
+    <img class="img" :src="picture" alt="" />
     <img
       class="mygift"
       src="../assets/icon/我的礼品.png"

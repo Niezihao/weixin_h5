@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-19 00:34:41
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-22 14:28:06
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -24,7 +24,7 @@ const router = useRouter();
 function play() {
   store.commit("setMusicInfo", { playing: true });
   if (index.value !== 0) return;
-
+  index.value = 1;
   const timer = setInterval(() => {
     if (index.value > 3) {
       clearInterval(timer);
