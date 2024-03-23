@@ -1,11 +1,18 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-22 17:55:47
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-23 22:58:26
 -->
 <script setup>
-import { ref, onMounted, getCurrentInstance, computed, nextTick } from "vue";
+import {
+  ref,
+  onMounted,
+  getCurrentInstance,
+  computed,
+  nextTick,
+  unref,
+} from "vue";
 import { useRouter } from "vue-router";
 import { showSuccessToast, showFailToast } from "vant";
 import { fabric } from "fabric";
@@ -52,67 +59,68 @@ const canvas = ref();
 const fileList = ref([]);
 const bgimgList = ref([img1, img2, img3]);
 const sucaiList = ref([
-  sucai1,
-  sucai2,
-  sucai3,
-  sucai4,
-  sucai5,
-  sucai6,
-  sucai7,
-  sucai8,
-  sucai9,
-  sucai10,
-  sucai11,
-  sucai12,
-  sucai13,
-  sucai14,
-  sucai15,
-  sucai16,
-  sucai17,
-  sucai18,
-  sucai19,
-  sucai20,
+  { img: sucai1, isSelect: false },
+  { img: sucai2, isSelect: false },
+  { img: sucai3, isSelect: false },
+  { img: sucai4, isSelect: false },
+  { img: sucai5, isSelect: false },
+  { img: sucai6, isSelect: false },
+  { img: sucai7, isSelect: false },
+  { img: sucai8, isSelect: false },
+  { img: sucai9, isSelect: false },
+  { img: sucai10, isSelect: false },
+  { img: sucai11, isSelect: false },
+  { img: sucai12, isSelect: false },
+  { img: sucai13, isSelect: false },
+  { img: sucai14, isSelect: false },
+  { img: sucai15, isSelect: false },
+  { img: sucai16, isSelect: false },
+  { img: sucai17, isSelect: false },
+  { img: sucai18, isSelect: false },
+  { img: sucai19, isSelect: false },
+  { img: sucai20, isSelect: false },
 ]);
+let imgLsit = [];
 const hasPicture = ref(false);
-const bgC = ref('');
-
-// function afterRead(file) {
-//   console.log("file", file);
-//   hasPicture.value = true;
-//   nextTick(() => {
-//     initCanvas();
-//     editorCanvas.isDrawingMode = false;
-//     let reader = new FileReader();
-//     reader.onload = (e) => {
-//       let data = e.target.result;
-//       fabric.Image.fromURL(data, (img) => {
-//         img.scaleToWidth(canvasWidth);
-//         img.scaleToHeight(canvasHeight);
-//         editorCanvas.add(img).renderAll();
-//       });
-//     };
-//     reader.readAsDataURL(file.file);
-//     setBg();
-//   });
-// }
+const bgC = ref("");
 
 function setBg() {
-  if(bgC.value){
-    editorCanvas.remove(bgC.value)
-    editorCanvas.renderAll()
+  if (bgC.value) {
+    editorCanvas.remove(bgC.value);
+    editorCanvas.renderAll();
   }
   if (timer) {
     clearTimeout(timer);
   }
   timer = setTimeout(() => {
     nextTick(() => {
-       bgC.value = fabric.Image.fromURL(bgImg.value, (img) => {
+      // let img = document.getElementById("bg");
+      // console.log(img);
+      // new fabric.Image(img, {
+      //   top: 0,
+      //   left: 0,
+      //   width: canvasHeight,
+      //   height: canvasWidth,
+      //   scaleX: 0.2,
+      //   scaleY: 0.2,
+      // });
+      bgC.value = fabric.Image.fromURL(bgImg.value, (img) => {
         img.selectable = false;
-        img.scaleToWidth(canvasWidth);
-        img.scaleToHeight(canvasHeight);
+        var scaleX = editorCanvas.getWidth() / img.width;
+        var scaleY = editorCanvas.getHeight() / img.height;
+        img.set({
+          // 通过scale来设置图片大小，这里设置和画布一样大
+          scaleX: scaleX,
+          scaleY: scaleY,
+          originX: "left",
+          originY: "top",
+        });
+        // img.scaleToWidth(canvasWidth);
+        // img.scaleToHeight(canvasHeight);
         editorCanvas.add(img).renderAll();
       });
       editorCanvas.bringToFront(bgC.value);
+      console.log("bgC.value", bgC.value);
     });
   }, 200);
 }
@@ -122,16 +130,38 @@ function setSucai(index) {
     showFailToast("请上传图片");
     return;
   }
-  const sucai = sucaiList.value[index];
+  const sucai = sucaiList.value[index].img;
   editorCanvas.isDrawingMode = false;
-
-  fabric.Image.fromURL(sucai, (img) => {
+  let su = "";
+  su = fabric.Image.fromURL(sucai, (img) => {
     img.left = canvasWidth / 2 - 35;
     img.top = canvasHeight / 2 - 35;
     img.scaleToWidth(70);
     img.scaleToHeight(70);
     editorCanvas.add(img).renderAll();
   });
+
+  // editorCanvas.add(su);
+  setTimeout(() => {
+    imgLsit.push({
+      img: editorCanvas.getObjects()[editorCanvas.getObjects().length - 1],
+      val: index,
+    });
+    sucaiList.value[index].isSelect = true;
+  }, 200);
+  console.log(editorCanvas.getObjects());
+}
+
+function deleteImg(index) {
+  sucaiList.value[index].isSelect = false;
+  imgLsit.forEach((item) => {
+    console.log(item.val);
+    console.log(index);
+    if (item.val === index) {
+      editorCanvas.remove(item.img);
+    }
+  });
+  // imgLsit.splice(1, index);
 }
 
 function initCanvas() {
@@ -142,60 +172,59 @@ function initCanvas() {
     originX: "center",
     originY: "center",
     backgroundColor: "#ffffff",
-    transparentCorners: false,
+    selectionBorderColor: "#RRGGBBAA",
+    transparentCorners: true,
+    // aligningLineWidth = 1, // 对齐线条宽度
+    //     aligningLineColor = '#666666', // 颜色
     // backgroundImage: bgimgList.value[0],
   });
-
-  // const bg = editorCanvas.setBackgroundImage(
-  //   bgimgList.value[0],
-  //   editorCanvas.renderAll.bind(editorCanvas)
-  // );
-  // bg.set({ width: "20" });
-
-  // mc = new Hammer.Manager(canvas.value);
-  // console.log(mc);
-  // mc.add(new Hammer.Pinch());
-  // mc.on("pinchstart", handlePinchStart);
-  // mc.on("pinchmove", handlePinchMove);
-  // mc.on("pinchend", handlePinchEnd);
-  // editorCanvas.getActiveObject();
-
+  fabric.Object.prototype.set({
+    transparentCorners: false,
+    borderColor: "rgba(255, 255, 255, 0)",
+    cornerColor: "rgba(255, 255, 255, 0)",
+    borderScaleFactor: 2.5,
+    cornerStyle: "circle",
+    cornerStrokeColor: "rgba(255, 255, 255, 0)",
+    // borderOpacityWhenMoving: 1,
+  });
   // 设置Fabric画布的宽度和高度
   editorCanvas.setWidth(canvasWidth);
   editorCanvas.setHeight(canvasHeight);
   editorCanvas.preserveObjectStacking = true;
+  // fabric.Object.prototype.cornerSize = 1;
+
+  // 删除图标
+  const deleteImg = document.createElement("img");
+  deleteImg.src =
+    "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
+
+  fabric.Object.prototype.controls.deleteControl = new fabric.Control({
+    x: 0.5,
+    y: -0.5,
+    offsetY: 0,
+    offsetX: 0,
+    cursorStyle: "pointer",
+    mouseUpHandler: deleteObject,
+    render: renderIcon(deleteImg),
+    cornerSize: 24,
+  });
 }
-
-// function handlePinchStart(event) {
-//   // 可以存储初始缩放值和当前选中的fabric对象
-// }
-
-// function handlePinchMove(event) {
-//   if (selectedObject) {
-//     const currentZoom = editorCanvas.getZoom();
-//     const zoomDelta = event.scale - 1; // 累积缩放差值
-//     const newZoom = currentZoom + zoomDelta;
-
-//     // 更新整个画布或仅更新选中的图片对象的缩放
-//     if (zoomingWholeCanvas) {
-//       editorCanvas.setZoom(newZoom);
-//     } else {
-//       selectedObject.setScale(
-//         selectedObject.scaleX * event.scale,
-//         selectedObject.scaleY * event.scale
-//       );
-//       editorCanvas.renderAll();
-//     }
-//   }
-// }
-
-// function handlePinchEnd(event) {
-//   // 可能需要平滑处理缩放结束状态
-// }
-
-// onMounted(() => {
-//   initCanvas();
-// });
+function renderIcon(icon) {
+  return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
+    var size = this.cornerSize;
+    ctx.save();
+    ctx.translate(left, top);
+    ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
+    ctx.drawImage(icon, -size / 2, -size / 2, size, size);
+    ctx.restore();
+  };
+}
+function deleteObject(eventData, transform) {
+  var target = transform.target;
+  var canvas = target.canvas;
+  canvas.remove(target);
+  canvas.requestRenderAll();
+}
 
 function changeBg(index) {
   bgImg.value = bgimgList.value[index];
@@ -242,8 +271,18 @@ function afterRead(file) {
     reader.onload = (e) => {
       let data = e.target.result;
       fabric.Image.fromURL(data, (img) => {
-        img.scaleToWidth(canvasWidth);
-        img.scaleToHeight(canvasHeight);
+        img.selectable = false;
+        var scaleX = editorCanvas.getWidth() / img.width;
+        var scaleY = editorCanvas.getHeight() / img.height;
+        img.set({
+          // 通过scale来设置图片大小，这里设置和画布一样大
+          scaleX: scaleX,
+          scaleY: scaleY,
+          originX: "left",
+          originY: "top",
+        });
+        // img.scaleToWidth(canvasWidth);
+        // img.scaleToHeight(canvasHeight);
         editorCanvas.add(img).renderAll();
       });
     };
@@ -270,69 +309,91 @@ function afterRead(file) {
 </script>
 
 <template>
-  <div class="picture" ref="picture">
-    <van-uploader
-      v-if="!hasPicture"
-      style="width: 100%; height: 100%"
-      v-model="fileList"
-      :after-read="afterRead"
-    >
-      <div class="uploader">
-        <div>
-          <van-icon name="plus" size="40" />
-          <div style="font-size: 16px">点击上传图片</div>
+  <div class="main">
+    <div class="picture" ref="picture">
+      <van-uploader
+        v-if="!hasPicture"
+        style="width: 100%; height: 100%"
+        v-model="fileList"
+        :after-read="afterRead"
+      >
+        <div class="uploader">
+          <div>
+            <van-icon name="plus" size="40" />
+            <div style="font-size: 16px">点击上传图片</div>
+          </div>
         </div>
-      </div>
-    </van-uploader>
-    <canvas v-else ref="canvas" id="editorCanvas"></canvas>
-  </div>
+      </van-uploader>
 
-  <div class="select_items">
-    <div class="top">
-      <div
-        class="circle"
-        style="background-color: #322156"
-        @click="changeBg(0)"
-      ></div>
-      <div
-        class="circle"
-        style="background-color: #ee9dcd"
-        @click="changeBg(1)"
-      ></div>
-      <div
-        class="circle"
-        style="background-color: #f2e38b"
-        @click="changeBg(2)"
-      ></div>
+      <canvas v-else ref="canvas" id="editorCanvas"></canvas>
     </div>
 
-    <div class="item">
-      <van-icon name="arrow-left" style="width: 7%" />
-      <div class="content">
-        <img
-          class="img_item"
-          :id="`sucai${index}`"
-          v-for="(item, index) in sucaiList"
-          :src="item"
-          alt=""
-          @click="setSucai(index)"
-        />
+    <div class="select_items">
+      <div class="top">
+        <div
+          class="circle"
+          style="margin-left: 20vw; background-color: #322156"
+          @click="changeBg(0)"
+        ></div>
+        <div
+          class="circle"
+          style="background-color: #ee9dcd"
+          @click="changeBg(1)"
+        ></div>
+        <div
+          class="circle"
+          style="background-color: #f2e38b"
+          @click="changeBg(2)"
+        ></div>
+        <img style="width: 20vw" src="../assets/change.png" alt="" />
       </div>
-      <van-icon name="arrow" style="width: 7%" />
-    </div>
 
-    <div class="bottom_btn">
-      <div class="flex">
-        <img
-          class="imgs"
-          src="../assets/save_btn.png"
-          alt=""
-          @click="download"
-        />
-        <img class="imgs" src="../assets/share_btn.png" alt="" @click="share" />
+      <div class="item">
+        <van-icon name="arrow-left" style="width: 7%" />
+        <div class="content">
+          <div
+            :id="`img${index}`"
+            style="position: relative"
+            v-for="(item, index) in sucaiList"
+          >
+            <!-- <div
+              v-if="item.isSelect"
+              style="position: absolute; left: 35px"
+              @click="deleteImg(index)"
+            >
+              x
+            </div> -->
+            <img
+              class="img_item"
+              :id="`sucai${index}`"
+              :src="item.img"
+              alt=""
+              @click="setSucai(index)"
+            />
+          </div>
+        </div>
+        <van-icon name="arrow" style="width: 7%" />
       </div>
-      <img class="bottom" src="../assets/icon/bottom.png" alt="" />
+
+      <div class="bottom_btn">
+        <div class="flex">
+          <img
+            class="imgs"
+            src="../assets/save_btn.png"
+            alt=""
+            @click="download"
+          />
+          <img
+            class="imgs"
+            src="../assets/share_btn.png"
+            alt=""
+            @click="share"
+          />
+        </div>
+        <img class="bottom" src="../assets/icon/bottom.png" alt="" />
+      </div>
     </div>
+    <img class="bg" id="bg" :src="img1" alt="" />
   </div>
 </template>
 
@@ -343,6 +404,10 @@ function afterRead(file) {
 }
 </style>
 <style lang="scss" scoped>
+::v-deep .van-image__imge {
+  width: 100vw !important;
+  height: 75vh !important;
+}
 ::v-deep .van-uploader__wrapper {
   width: 100%;
   height: 100%;
@@ -350,6 +415,11 @@ function afterRead(file) {
 ::v-deep .van-uploader__input-wrapper {
   width: 100%;
   height: 100%;
+}
+.main {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 .picture {
   width: 100vw;
@@ -424,5 +494,9 @@ function afterRead(file) {
   left: 24%;
   bottom: 5%;
   transform: scale(0.7);
+}
+.bg {
+  width: 100vw;
+  height: 75vh;
 }
 </style>

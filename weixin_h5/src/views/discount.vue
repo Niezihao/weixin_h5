@@ -2,11 +2,12 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 00:28:31
+ * @LastEditTime: 2024-03-23 17:23:08
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 
 const router = useRouter();
 
@@ -17,6 +18,18 @@ function go() {
 function goBack() {
   router.push("/giftIndex");
 }
+function putWin() {
+  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (userInfo && userInfo.curCusId) {
+    axios.put("users/profile/update", {
+      openId: userInfo.curCusId,
+      prize: "coupon",
+    });
+  }
+}
+onMounted(() => {
+  putWin();
+});
 </script>
 
 <template>

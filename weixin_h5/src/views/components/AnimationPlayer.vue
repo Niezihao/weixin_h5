@@ -42,12 +42,7 @@ onMounted(() => {
 
 <template>
   <main>
-    <img
-      class="img animate__animated animate__zoomIn"
-      :src="imgLsit[index]"
-      alt="Image"
-      @click.once="play"
-    />
+    <img class="img" :src="imgLsit[index]" alt="Image" @click.once="play" />
   </main>
 </template>
 

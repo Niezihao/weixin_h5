@@ -1,13 +1,14 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-22 17:22:55
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-23 21:46:13
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { showSuccessToast, showFailToast } from "vant";
 
 const router = useRouter();
 
@@ -15,6 +16,10 @@ function goGift() {
   router.push("/myGift");
 }
 async function lottery() {
+  if (prize.value) {
+    showFailToast("已抽取礼品，不能重复抽取");
+    return;
+  }
   const res = await axios.get("users/box-number");
   if (res && res.data && res.data.count <= 45) {
     const randomValue = Math.random();
@@ -34,6 +39,31 @@ const imgUrl = computed(() => {
 const picture = computed(() => {
   let picture = sessionStorage.getItem("picture");
   return picture;
+});
+const prize = computed(() => {
+  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (userInfo && userInfo.prize) {
+    return userInfo.prize;
+  } else {
+    return "";
+  }
+});
+
+function getUserInfo() {
+  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (userInfo && userInfo.curCusId) {
+    axios.get(`users/profile/${userInfo.curCusId}`).then((res) => {
+      console.log(res);
+
+      sessionStorage.setItem(
+        "userInfo",
+        JSON.stringify(Object.assign(userInfo, res.data))
+      );
+    });
+  }
+}
+onMounted(() => {
+  getUserInfo();
 });
 </script>
 
@@ -73,10 +103,10 @@ const picture = computed(() => {
 }
 .img {
   position: absolute;
-  width: 90%;
+  width: 80%;
   height: 60vh;
   top: 13%;
-  left: 5%;
+  left: 10%;
   border-radius: 20px;
 }
 .mygift {

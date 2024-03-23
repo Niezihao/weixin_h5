@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-22 11:02:42
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-23 17:23:32
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -16,13 +16,27 @@ function go() {
 function goBack() {
   router.push("/giftIndex");
 }
+const prize = computed(() => {
+  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (userInfo && userInfo.prize) {
+    return userInfo.prize;
+  } else {
+    return "";
+  }
+});
 </script>
 
 <template>
   <div class="main">
     <img class="imgx" src="../assets/icon/x1.png" alt="" @click="goBack" />
-    <img class="img" src="../assets/iswin.png" alt="" @click="go" />
-    <img class="img" src="../assets/isdiscount.png" alt="" />
+    <img
+      v-if="prize === 'box'"
+      class="img"
+      src="../assets/iswin.png"
+      alt=""
+      @click="go"
+    />
+    <img v-else class="img" src="../assets/isdiscount.png" alt="" />
   </div>
 </template>
 

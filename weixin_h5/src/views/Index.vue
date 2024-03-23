@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-22 17:54:25
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-23 18:27:18
 -->
 
 <script setup>
@@ -61,7 +61,7 @@ async function login() {
     });
     const userInfo = Object.assign(res, userdata.value);
     console.log(userInfo);
-    sessionStorage.setItem("userInfo", userInfo);
+    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
   }
 }
 
@@ -122,7 +122,7 @@ onMounted(() => {
 
 <template>
   <main>
-    <div v-if="isWeixin" class="toTip">请在微信客户端打开</div>
+    <div v-if="!isWeixin" class="toTip">请在微信客户端打开</div>
 
     <AnimationPlayer v-else></AnimationPlayer>
     {{ route.query }}
