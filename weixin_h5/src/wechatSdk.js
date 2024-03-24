@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-20 00:37:18
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 00:50:21
+ * @LastEditTime: 2024-03-25 00:38:39
  */
 
 // import { wechatConfig } from "@/utils/wechatSdk.js";
@@ -40,7 +40,7 @@ const APPID = "wx8f6ff2f32f7c93a5"; //公众号的appId
  */
 export const wechatConfig = (tag, share_title, share_desc, share_link, share_cover) => {
     // var wx_host = window.location.href.split('#')[0];
-    let wx_host = `${location.origin}${location.pathname}${location.search}`
+    let wx_host = decodeURIComponent(`${location.origin}${location.pathname}${location.search}`)
     console.log('wx_host', wx_host); //后端获取签名，需要前端传url，url要求看注解
     const cover = share_cover || 'https://hbimg.huaban.com/a2a9a71b293f6664b342e0cefc6e1fccd5f921f83cfa5-RoYLU8_fw658/format/webp'; //不重要的默认图片地址
     return new Promise((resolve, reject) => {
