@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-20 00:37:18
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-22 14:21:30
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-24 00:50:21
  */
 
 // import { wechatConfig } from "@/utils/wechatSdk.js";
@@ -27,7 +27,7 @@ function getWechatConfig(url) {
 }
 
 
-const APPID = "wx2a2b14d1eab2ae9d"; //公众号的appId
+const APPID = "wx8f6ff2f32f7c93a5"; //公众号的appId
 
 /**
  * 获取微信配置

@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-23 22:58:26
+ * @LastEditTime: 2024-03-24 23:12:51
 -->
 <script setup>
 import {
@@ -41,6 +41,9 @@ import img1 from "../assets/sucai/插画1.png";
 import img2 from "../assets/sucai/插画2.png";
 import img3 from "../assets/sucai/插画3.png";
 import axios from "axios";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 let editorCanvas = "";
 let mc = "";
@@ -52,6 +55,7 @@ let viewportHeight = window.innerHeight;
 let canvasWidth = (viewportWidth * 100) / 100; // 100vw
 let canvasHeight = (viewportHeight * 75) / 100; // 75vh
 
+const { proxy } = getCurrentInstance();
 const router = useRouter();
 const picture = ref();
 const bgImg = ref(img1);
@@ -257,6 +261,16 @@ function download() {
 }
 
 function share() {
+  let wx_host = `${location.origin}${location.pathname}${location.search}`;
+  proxy.$wx.updateTimelineShareData({
+    title: "默认标题", // 分享标题
+    link: `${wx_host}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl: "", // 分享图标
+    success: function () {
+      // 用户点击了分享后执行的回调函数
+      console.info("分享到朋友圈");
+    },
+  });
   router.push("/page");
 }
 function afterRead(file) {
@@ -271,18 +285,53 @@ function afterRead(file) {
     reader.onload = (e) => {
       let data = e.target.result;
       fabric.Image.fromURL(data, (img) => {
+        console.log(canvasWidth);
+        console.log(canvasHeight);
+        console.log(img.width);
+        console.log(img.height);
+        // console.log(img.width / canvasWidth);
+        // console.log(img.height / canvasHeight);
+        // console.log((img.width - canvasWidth) / 2);
+        // console.log((img.height - canvasHeight) / 2);
         img.selectable = false;
-        var scaleX = editorCanvas.getWidth() / img.width;
-        var scaleY = editorCanvas.getHeight() / img.height;
-        img.set({
-          // 通过scale来设置图片大小，这里设置和画布一样大
-          scaleX: scaleX,
-          scaleY: scaleY,
-          originX: "left",
-          originY: "top",
-        });
-        // img.scaleToWidth(canvasWidth);
-        // img.scaleToHeight(canvasHeight);
+        if (img.width < img.height) {
+          // let realWidth = img.width * (canvasHeight / img.height);
+          let realHeight = img.height / (img.width / canvasWidth);
+          console.log(realHeight);
+          // if (img.width < canvasWidth) {
+          if (realHeight < canvasHeight) {
+            img.scaleToHeight(canvasHeight);
+            img.top = 0;
+            img.left = -(
+              (img.width * (canvasHeight / img.height) - canvasWidth) /
+              2
+            );
+          } else {
+            img.scaleToWidth(canvasWidth);
+            img.top = -(realHeight - canvasHeight) / 2;
+            img.left = 0;
+          }
+          // } else {
+          //   if (realHeight < canvasHeight) {}else{
+          //   }
+          // }
+          // var scaleX = editorCanvas.getWidth() / img.width;
+          // var scaleY = editorCanvas.getHeight() / img.height;
+          // img.set({
+          //   // 通过scale来设置图片大小，这里设置和画布一样大
+          //   scaleX: scaleX,
+          //   scaleY: scaleY,
+          //   originX: "left",
+          //   originY: "top",
+          // });
+        } else {
+          img.scaleToHeight(canvasHeight);
+          img.top = 0;
+          img.left = -(
+            (img.width * (canvasHeight / img.height) - canvasWidth) /
+            2
+          );
+        }
         editorCanvas.add(img).renderAll();
       });
     };
@@ -306,6 +355,10 @@ function afterRead(file) {
       file.message = "上传失败";
     });
 }
+
+onMounted(() => {
+  store.commit("setMusicInfo", { playing: false });
+});
 </script>
 
 <template>

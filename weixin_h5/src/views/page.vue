@@ -2,14 +2,18 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-22 01:11:18
+ * @LastEditTime: 2024-03-24 22:20:30
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 const show = ref(true);
 const router = useRouter();
+const isMusic = ref(false);
 
 function go() {
   router.push("/createPicture");
@@ -17,12 +21,35 @@ function go() {
 function toMyGift() {
   router.push("/myGift");
 }
+function close() {
+  isMusic.value = true;
+  store.commit("setMusicInfo", { playing: false });
+}
+function open() {
+  isMusic.value = false;
+  store.commit("increment");
+  store.commit("setMusicInfo", { playing: true });
+}
 onMounted(() => {});
 </script>
 
 <template>
   <main>
     <div style="position: relative">
+      <img
+        v-if="!isMusic"
+        class="music"
+        src="../assets/音乐.png"
+        alt=""
+        @click="close"
+      />
+      <img
+        v-if="isMusic"
+        class="music"
+        src="../assets/关闭音乐.png"
+        alt=""
+        @click="open"
+      />
       <div class="main"></div>
       <!-- <van-button class="btn" @click="go">生成通行证</van-button> -->
       <img @click="go" class="btn" src="../assets/goTongxinzheng.png" alt="" />
@@ -58,6 +85,12 @@ onMounted(() => {});
 </template>
 
 <style scoped>
+.music {
+  position: absolute;
+  width: 6vw;
+  top: 2vh;
+  left: 5vw;
+}
 .main {
   width: 100vw;
   height: 100vh;
@@ -67,16 +100,16 @@ onMounted(() => {});
 .myGift {
   position: absolute;
   width: 35vw;
-  height: 6vh;
-  top: 86.5vh;
+  height: 7vh;
+  top: 87vh;
   left: 15vw;
   /* transform: translate(5vw); */
 }
 .roles {
   position: absolute;
   width: 35vw;
-  height: 6vh;
-  top: 86.5vh;
+  height: 7vh;
+  top: 87vh;
   left: 50%;
   /* transform: translate(px); */
 }
@@ -86,7 +119,7 @@ onMounted(() => {});
 .btn {
   position: absolute;
   width: 70vw;
-  height: 7vh;
+  height: 8vh;
   top: 79vh;
   left: 50%;
   transform: translate(-35vw);

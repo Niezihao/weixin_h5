@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-22 14:28:06
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-24 23:00:21
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -19,10 +19,10 @@ const store = useStore();
 
 const imgLsit = ref([img1, img2, img3, img4, img5]);
 const index = ref(0);
+const isMusic = ref(false);
 const router = useRouter();
 
 function play() {
-  store.commit("setMusicInfo", { playing: true });
   if (index.value !== 0) return;
   index.value = 1;
   const timer = setInterval(() => {
@@ -34,19 +34,48 @@ function play() {
     }
   }, 1500);
 }
-
+function close() {
+  isMusic.value = true;
+  store.commit("setMusicInfo", { playing: false });
+}
+function open() {
+  isMusic.value = false;
+  store.commit("increment");
+  store.commit("setMusicInfo", { playing: true });
+}
 onMounted(() => {
+  store.commit("setMusicInfo", { playing: true });
   // play();
 });
 </script>
 
 <template>
-  <main>
+  <main style="position: relative">
+    <img
+      v-if="!isMusic"
+      class="music"
+      src="../../assets/音乐.png"
+      alt=""
+      @click="close"
+    />
+    <img
+      v-if="isMusic"
+      class="music"
+      src="../../assets/关闭音乐.png"
+      alt=""
+      @click="open"
+    />
     <img class="img" :src="imgLsit[index]" alt="Image" @click.once="play" />
   </main>
 </template>
 
 <style scoped>
+.music {
+  position: absolute;
+  width: 6vw;
+  top: 2vh;
+  left: 5vw;
+}
 .img {
   width: 100vw;
   height: 100vh;
