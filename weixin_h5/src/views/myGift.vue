@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 12:16:36
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-25 12:04:00
 -->
 <script>
 export default {
@@ -16,6 +16,7 @@ export default {
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+const { proxy } = getCurrentInstance();
 
 function go() {
   router.push("/wirteAddress");
@@ -42,6 +43,19 @@ const prize = computed(() => {
     return "";
   }
 });
+
+function goMiniProgram() {
+  // 小程序跳转方法
+  proxy.$wx.miniProgram.navigateTo({
+    url: "/pages/index/index", // 指定跳转至小程序页面的路径
+    success: (res) => {
+      console.log(res); // 页面跳转成功的回调函数
+    },
+    fail: (err) => {
+      console.log(err); // 页面跳转失败的回调函数
+    },
+  });
+}
 </script>
 
 <template>
@@ -60,6 +74,7 @@ const prize = computed(() => {
       class="img"
       src="../assets/isdiscount.png"
       alt=""
+      @click="goMiniProgram"
     />
   </div>
 </template>
