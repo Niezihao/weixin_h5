@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 23:12:51
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-25 11:51:31
 -->
 <script setup>
 import {
@@ -262,6 +262,14 @@ function download() {
 
 function share() {
   let wx_host = `${location.origin}${location.pathname}${location.search}`;
+  proxy.$wx.miniProgram.postMessage({
+    data: {
+      title: "aa", // 标题
+      desc: "ddd", // 描述
+      imgUrl: "", // 图片
+      link: "", // 链接
+    },
+  });
   proxy.$wx.updateTimelineShareData({
     title: "默认标题", // 分享标题
     link: `${wx_host}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致

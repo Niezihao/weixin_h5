@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-20 00:37:18
- * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-25 00:38:39
+ * @LastEditors: niezihao
+ * @LastEditTime: 2024-03-25 10:24:52
  */
 
 // import { wechatConfig } from "@/utils/wechatSdk.js";
@@ -23,6 +23,11 @@
 import axios from "axios"
 
 function getWechatConfig(url) {
+    // axios.get('/ms-sanfu-spi-customer/v1/customer/wechatConfig', {
+    //     headers: {
+    //         Authorization: 'SANFU-OPEN-API appId="30001",nonce="MkgAaoFqSi",timestamp="1612332668",signature="RjBDNUE2Q0Y3NUJGNTY4RkM4QjRENEVBMkEyRDZGN0FBMEI2Nzk4RjAwM0VBMDcwNDU2RDdBQ0IyQ0Y4MTkzNw=="'
+    //     }
+    // })
     return axios.get(`/users/getSignature?url=${url}`)
 }
 

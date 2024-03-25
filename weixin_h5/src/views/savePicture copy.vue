@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 15:18:36
+ * @LastEditTime: 2024-03-25 14:46:14
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -10,14 +10,11 @@ import { useRouter } from "vue-router";
 import html2canvas from "html2canvas";
 import dayjs from "dayjs";
 
-let viewportWidth = window.innerWidth;
-let viewportHeight = window.innerHeight;
 const { proxy } = getCurrentInstance();
 const router = useRouter();
 
 const formattedNow = ref("");
 const timestamp = ref("");
-const isResImg = ref(false);
 
 function go() {
   // 获取你想要转换为图片的DOM元素
@@ -30,8 +27,8 @@ function go() {
     scale: 2,
     // 其他配置...
   }).then(function (canvas) {
-    // canvas.toDataURL()将canvas内容转换为data URI格式
-    var imgSrc = canvas.toDataURL("image/png");
+    // // canvas.toDataURL()将canvas内容转换为data URI格式
+    // var imgSrc = canvas.toDataURL("image/png");
     // // 创建一个可下载的链接
     // var link = document.createElement("a");
     // link.download = "screenshot.png"; // 设置下载的文件名
@@ -40,24 +37,6 @@ function go() {
     // document.body.appendChild(link);
     // link.click();
     // document.body.removeChild(link);
-    let img = new Image();
-    img.setAttribute("crossOrigin", "Anonymous");
-    img.src = imgSrc;
-    // 当图片加载完成后，将其添加到DOM中并设置样式
-    img.onload = function () {
-      // 创建一个容器或其他现有元素来包裹图片
-      let container = document.getElementById("main");
-      img.className = "resImg"; // 假设有一个名为'image-container'的CSS类来设置样式
-      // 直接设置图片样式（也可以通过类名间接设置）
-      img.style.width = "75vw";
-      img.style.height = "75vh";
-      img.style.position = "absolute";
-      img.style.top = "10vh";
-      img.style.left = "12.5vw";
-      // 将图片添加到容器中
-      container.appendChild(img);
-    };
-    isResImg.value = true;
   });
   // let wx_host = `${location.origin}${location.pathname}${location.search}`;
   // proxy.$wx.updateAppMessageShareData({
@@ -83,7 +62,7 @@ function go() {
   //     });
   //   },
   // });
-  // router.push("/giftIndex");
+  router.push("/giftIndex");
 }
 const picture = computed(() => {
   let picture = sessionStorage.getItem("picture");
@@ -111,15 +90,13 @@ onMounted(() => {
 
 <template>
   <div id="main" class="main">
-    <img v-if="isResImg" class="resImg" id="resImg" src="" alt="" />
+    <div class="imgBg"></div>
 
-    <div v-else class="imgBg">
-      <div class="font1">{{ name ? name : "" }}</div>
-      <div class="font2">{{ formattedNow }}</div>
-      <div class="font4">{{ formattedNow }}</div>
-      <div class="font3">{{ timestamp }}</div>
-      <img class="imgPt" :src="picture" alt="" />
-    </div>
+    <div class="font1">{{ name ? name : "" }}</div>
+    <div class="font2">{{ formattedNow }}</div>
+    <div class="font4">{{ formattedNow }}</div>
+    <div class="font3">{{ timestamp }}</div>
+    <img class="imgPt" :src="picture" alt="" />
     <!-- <img class="imgBG" :src="picture" alt="" /> -->
     <img
       class="img"
@@ -162,7 +139,7 @@ onMounted(() => {
   left: 25%;
 }
 .imgBg {
-  position: relative;
+  position: absolute;
   width: 100vw;
   height: 100vh;
   top: 0;
