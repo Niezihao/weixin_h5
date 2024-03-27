@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 10:28:16
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-27 09:29:34
  */
 import { fileURLToPath, URL } from 'node:url'
 
@@ -24,7 +24,7 @@ export default defineConfig({
     port: 8000,
     proxy: {
       '/api/ms-sanfu-spi-customer': {
-        target: 'https://tm.sanfu.com',	//实际请求地址
+        target: 'https://m.sanfu.com',	//实际请求地址
         // target: 'http://192.168.110.29:3000',	//实际请求地址
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
@@ -41,7 +41,7 @@ export default defineConfig({
       //   changeOrigin: true,
       //   rewrite: (path) => path.replace(/^\//, '')
       // },
-    
+
     }
   }
 })

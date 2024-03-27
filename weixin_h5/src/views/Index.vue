@@ -2,13 +2,14 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 22:54:03
+ * @LastEditTime: 2024-03-27 11:36:11
 -->
 
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import AnimationPlayer from "./components/AnimationPlayer.vue";
 import { useRouter, useRoute } from "vue-router";
+import axios from "axios";
 
 const { proxy } = getCurrentInstance(); //来获取全局 globalProperties 中配置的信息
 const router = useRouter();
@@ -55,6 +56,7 @@ const userdata = ref({});
 
 // 后台
 async function login() {
+  userdata.value.curCusId = userdata.value.cardid;
   if (userdata.value.curCusId) {
     const res = await proxy.$axios.post("/users/login", {
       openId: userdata.value.curCusId,
@@ -117,6 +119,7 @@ onMounted(() => {
   // toLogin();
   userdata.value = getQueryParamsAsObject();
   login();
+  axios.put("/log/update");
 });
 </script>
 

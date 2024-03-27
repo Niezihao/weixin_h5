@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 12:04:00
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-27 09:46:31
 -->
 <script>
 export default {
@@ -15,6 +15,8 @@ export default {
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
+
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
@@ -46,8 +48,31 @@ const prize = computed(() => {
 
 function goMiniProgram() {
   // 小程序跳转方法
+  proxy.$wx.miniProgram.navigateBack({
+    delta: 1,
+    fail: () => {
+      wx.miniProgram.switchTab({
+        url: "/pages/index/index",
+      });
+    },
+  });
+
+  // proxy.$wx.miniProgram.navigateTo({
+  //   url: "../index/index", // 指定跳转至小程序页面的路径
+  //   success: (res) => {
+  //     console.log(res); // 页面跳转成功的回调函数
+  //   },
+  //   fail: (err) => {
+  //     console.log(err); // 页面跳转失败的回调函数
+  //   },
+  // });
+}
+function goGift() {
+  // 小程序跳转方法
+  // proxy.$wx.miniProgram.navigateBack()({});
+
   proxy.$wx.miniProgram.navigateTo({
-    url: "/pages/index/index", // 指定跳转至小程序页面的路径
+    url: "../couponcenter/index/index", // 指定跳转至小程序页面的路径
     success: (res) => {
       console.log(res); // 页面跳转成功的回调函数
     },
@@ -56,10 +81,25 @@ function goMiniProgram() {
     },
   });
 }
+function getUserInfo() {
+  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (userInfo && userInfo.curCusId) {
+    axios.get(`users/profile/${userInfo.curCusId}`).then((res) => {
+      sessionStorage.setItem(
+        "userInfo",
+        JSON.stringify(Object.assign(userInfo, res.data))
+      );
+    });
+  }
+}
+onMounted(() => {
+  getUserInfo();
+});
 </script>
 
 <template>
   <div class="main">
+    <div class="goShop" @click="goMiniProgram"></div>
     <img class="imgx1" src="../assets/我的礼品.png" alt="" />
     <img class="imgx" src="../assets/icon/x1.png" alt="" @click="goBack" />
     <img
@@ -74,7 +114,7 @@ function goMiniProgram() {
       class="img"
       src="../assets/isdiscount.png"
       alt=""
-      @click="goMiniProgram"
+      @click="goGift"
     />
   </div>
 </template>
@@ -105,5 +145,12 @@ function goMiniProgram() {
   height: 17vh;
   top: 14%;
   left: 5%;
+}
+.goShop {
+  position: absolute;
+  width: 60vw;
+  height: 6vh;
+  left: 20vw;
+  bottom: 4vh;
 }
 </style>

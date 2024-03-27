@@ -2,18 +2,28 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-23 17:23:08
+ * @LastEditTime: 2024-03-27 11:42:05
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { buildPostAuthorizationHeader } from "../signatureHelper";
 
+const { proxy } = getCurrentInstance();
 const router = useRouter();
 
 function go() {
-  console.log(go);
-  router.push("/myGift");
+  proxy.$wx.miniProgram.navigateTo({
+    url: "../couponcenter/index/index", // 指定跳转至小程序页面的路径
+    success: (res) => {
+      console.log(res); // 页面跳转成功的回调函数
+      // router.push("/myGift");
+    },
+    fail: (err) => {
+      console.log(err); // 页面跳转失败的回调函数
+    },
+  });
 }
 function goBack() {
   router.push("/giftIndex");
@@ -25,6 +35,24 @@ function putWin() {
       openId: userInfo.curCusId,
       prize: "coupon",
     });
+    axios.post(
+      "/ms-sanfu-spi-customer/v1/coupon/sendCoupon",
+      {
+        curCusId: userInfo.curCusId,
+        couponId: "C20240314160000",
+        shoId: userInfo.shoId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: buildPostAuthorizationHeader(
+            "30009",
+            userInfo.curCusId
+          ),
+          // 其他可能的header
+        },
+      }
+    );
   }
 }
 onMounted(() => {

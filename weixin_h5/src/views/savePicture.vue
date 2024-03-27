@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 15:18:36
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-27 09:33:35
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -18,47 +18,51 @@ const router = useRouter();
 const formattedNow = ref("");
 const timestamp = ref("");
 const isResImg = ref(false);
+const text = ref("");
 
 function go() {
   // 获取你想要转换为图片的DOM元素
-  var domElement = document.getElementById("main");
-
-  // 使用html2canvas将DOM转换为canvas
-  html2canvas(domElement, {
-    // 可选配置项，比如解决跨域图像问题
-    useCORS: true,
-    scale: 2,
-    // 其他配置...
-  }).then(function (canvas) {
-    // canvas.toDataURL()将canvas内容转换为data URI格式
-    var imgSrc = canvas.toDataURL("image/png");
-    // // 创建一个可下载的链接
-    // var link = document.createElement("a");
-    // link.download = "screenshot.png"; // 设置下载的文件名
-    // link.href = imgSrc; // 设置链接的href为图片数据
-    // // 触发点击事件以下载图片
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-    let img = new Image();
-    img.setAttribute("crossOrigin", "Anonymous");
-    img.src = imgSrc;
-    // 当图片加载完成后，将其添加到DOM中并设置样式
-    img.onload = function () {
-      // 创建一个容器或其他现有元素来包裹图片
-      let container = document.getElementById("main");
-      img.className = "resImg"; // 假设有一个名为'image-container'的CSS类来设置样式
-      // 直接设置图片样式（也可以通过类名间接设置）
-      img.style.width = "75vw";
-      img.style.height = "75vh";
-      img.style.position = "absolute";
-      img.style.top = "10vh";
-      img.style.left = "12.5vw";
-      // 将图片添加到容器中
-      container.appendChild(img);
-    };
-    isResImg.value = true;
-  });
+  // var domElement = document.getElementById("imgBg");
+  // // 使用html2canvas将DOM转换为canvas
+  // html2canvas(domElement, {
+  //   // 可选配置项，比如解决跨域图像问题
+  //   useCORS: true,
+  //   scale: 2,
+  //   backgroundColor: "#101a2c",
+  //   // 其他配置...
+  // }).then(function (canvas) {
+  //   // canvas.toDataURL()将canvas内容转换为data URI格式
+  //   var imgSrc = canvas.toDataURL("image/png");
+  //   // // 创建一个可下载的链接
+  //   // var link = document.createElement("a");
+  //   // link.download = "screenshot.png"; // 设置下载的文件名
+  //   // link.href = imgSrc; // 设置链接的href为图片数据
+  //   // // 触发点击事件以下载图片
+  //   // document.body.appendChild(link);
+  //   // link.click();
+  //   // document.body.removeChild(link);
+  //   let img = new Image();
+  //   img.setAttribute("crossOrigin", "Anonymous");
+  //   img.src = imgSrc;
+  //   // 当图片加载完成后，将其添加到DOM中并设置样式
+  //   img.onload = function () {
+  //     // 创建一个容器或其他现有元素来包裹图片
+  //     let container = document.getElementById("main");
+  //     img.className = "resImg"; // 假设有一个名为'image-container'的CSS类来设置样式
+  //     // 直接设置图片样式（也可以通过类名间接设置）
+  //     // img.style.width = "200px";
+  //     // img.style.height = "400px";
+  //     img.style.width = viewportWidth * 0.8 + "px";
+  //     img.style.width = viewportWidth * 0.8 + "px";
+  //     img.style.height = viewportHeight * 0.7 + "px";
+  //     img.style.position = "absolute";
+  //     img.style.top = "10vh";
+  //     img.style.left = "10vw";
+  //     // 将图片添加到容器中
+  //     container.appendChild(img);
+  //   };
+  //   isResImg.value = true;
+  // });
   // let wx_host = `${location.origin}${location.pathname}${location.search}`;
   // proxy.$wx.updateAppMessageShareData({
   //   title: share_title || "默认标题", // 分享标题
@@ -83,7 +87,7 @@ function go() {
   //     });
   //   },
   // });
-  // router.push("/giftIndex");
+  router.push("/giftIndex");
 }
 const picture = computed(() => {
   let picture = sessionStorage.getItem("picture");
@@ -97,36 +101,67 @@ const name = computed(() => {
     return "";
   }
 });
-function touchstart() {
-  console.log("touchstart");
-}
-function touchend() {
-  console.log("touchend");
-}
+
 onMounted(() => {
   formattedNow.value = dayjs().format("YYYY.MM.DD");
   timestamp.value = Math.floor(Date.now() / 1000);
+  setTimeout(() => {
+    var domElement = document.getElementById("imgBg");
+    // 使用html2canvas将DOM转换为canvas
+    html2canvas(domElement, {
+      // 可选配置项，比如解决跨域图像问题
+      useCORS: true,
+      scale: 2,
+      backgroundColor: "#101a2c",
+      // 其他配置...
+    }).then(function (canvas) {
+      // canvas.toDataURL()将canvas内容转换为data URI格式
+      var imgSrc = canvas.toDataURL("image/png");
+
+      let img = new Image();
+      img.setAttribute("crossOrigin", "Anonymous");
+      img.src = imgSrc;
+      // 当图片加载完成后，将其添加到DOM中并设置样式
+      img.onload = function () {
+        // 创建一个容器或其他现有元素来包裹图片
+        let container = document.getElementById("main");
+        img.className = "resImg"; // 假设有一个名为'image-container'的CSS类来设置样式
+        // 直接设置图片样式（也可以通过类名间接设置）
+        // img.style.width = "200px";
+        // img.style.height = "400px";
+        img.style.width = viewportWidth * 0.8 + "px";
+        img.style.width = viewportWidth * 0.8 + "px";
+        img.style.height = viewportHeight * 0.7 + "px";
+        img.style.position = "absolute";
+        img.style.top = "10vh";
+        img.style.left = "10vw";
+        // 将图片添加到容器中
+        container.appendChild(img);
+        text.value = "长按保存星球通行证!";
+      };
+      isResImg.value = true;
+    });
+  }, 200);
 });
 </script>
 
 <template>
   <div id="main" class="main">
-    <img v-if="isResImg" class="resImg" id="resImg" src="" alt="" />
+    <div class="text">
+      {{ text }}
+    </div>
+    <img v-if="isResImg" class="resImg" id="resImg" alt="" />
 
-    <div v-else class="imgBg">
-      <div class="font1">{{ name ? name : "" }}</div>
+    <div v-else class="imgBg" id="imgBg">
+      <div class="font1">{{ name ? name : "" }}aa</div>
       <div class="font2">{{ formattedNow }}</div>
       <div class="font4">{{ formattedNow }}</div>
       <div class="font3">{{ timestamp }}</div>
       <img class="imgPt" :src="picture" alt="" />
     </div>
+
     <!-- <img class="imgBG" :src="picture" alt="" /> -->
-    <img
-      class="img"
-      src="../assets/icon/保存星球通行证.png"
-      alt=""
-      @click="go"
-    />
+    <img class="img" src="../assets/icon/进入抽奖页.png" alt="" @click="go" />
   </div>
 </template>
 
@@ -156,28 +191,34 @@ onMounted(() => {
 }
 .imgPt {
   position: absolute;
-  width: 25%;
-  height: 18.75vh;
+  width: 34%;
+  height: 25.75vh;
   top: 40%;
-  left: 25%;
+  left: 16%;
 }
 .imgBg {
   position: relative;
   width: 100vw;
   height: 100vh;
-  top: 0;
-  left: 0;
-  background: url("../assets/icon/通行证bg2.png");
+  /* top: 10vh;
+  left: 10vw; */
+  background: url("../assets/icon/通行证bg5.png");
   background-repeat: round;
   background-size: 100vw 100vh;
 }
+/* .resImg {
+  width: 80vw;
+  height: 70vh;
+  top: 10vh;
+  left: 10vw;
+} */
 .font2 {
   position: absolute;
   /* width: 25%;
   height: 18.75vh; */
-  top: 35.5%;
-  left: 35%;
-  font-size: 12px;
+  top: 34.5%;
+  left: 31%;
+  font-size: 15px;
   /* transform: scale(0.6); */
   font-family: "胡晓波骚包体";
 }
@@ -185,9 +226,9 @@ onMounted(() => {
   position: absolute;
   /* width: 25%;
   height: 18.75vh; */
-  top: 35.5%;
-  left: 23%;
-  font-size: 12px;
+  top: 34.5%;
+  left: 14%;
+  font-size: 15px;
   /* transform: scale(0.6); */
   font-family: "胡晓波骚包体";
 }
@@ -195,18 +236,26 @@ onMounted(() => {
   position: absolute;
   /* width: 25%;
   height: 18.75vh; */
-  top: 40.5%;
-  left: 58%;
+  top: 41%;
+  left: 59%;
   font-family: "胡晓波骚包体";
 }
 .font4 {
   position: absolute;
   /* width: 25%;
   height: 18.75vh; */
-  top: 46%;
-  left: 57%;
-  font-size: 12px;
+  top: 48.5%;
+  left: 59%;
+  font-size: 15px;
   /* transform: scale(0.6); */
+  font-family: "胡晓波骚包体";
+}
+.text {
+  color: azure;
+  position: absolute;
+  width: 50vw;
+  top: 6vw;
+  left: 25vw;
   font-family: "胡晓波骚包体";
 }
 </style>

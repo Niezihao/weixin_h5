@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 23:00:21
+ * @LastEditTime: 2024-03-26 20:15:59
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -32,7 +32,7 @@ function play() {
     } else {
       index.value++;
     }
-  }, 1500);
+  }, 3000);
 }
 function close() {
   isMusic.value = true;

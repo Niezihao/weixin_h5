@@ -1,8 +1,8 @@
 <!--
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 11:51:31
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-27 09:30:34
 -->
 <script setup>
 import {
@@ -262,24 +262,23 @@ function download() {
 
 function share() {
   let wx_host = `${location.origin}${location.pathname}${location.search}`;
-  proxy.$wx.miniProgram.postMessage({
-    data: {
-      title: "aa", // 标题
-      desc: "ddd", // 描述
-      imgUrl: "", // 图片
-      link: "", // 链接
-    },
-  });
-  proxy.$wx.updateTimelineShareData({
-    title: "默认标题", // 分享标题
-    link: `${wx_host}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-    imgUrl: "", // 分享图标
-    success: function () {
-      // 用户点击了分享后执行的回调函数
-      console.info("分享到朋友圈");
-    },
-  });
-  router.push("/page");
+  // proxy.$wx.miniProgram.postMessage({
+  //   data: {
+  //     title: "aa", // 标题
+  //     desc: "ddd", // 描述
+  //     imgUrl: "", // 图片
+  //     link: "", // 链接
+  //   },
+  // });
+  // proxy.$wx.updateTimelineShareData({
+  //   title: "默认标题", // 分享标题
+  //   link: `${wx_host}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+  //   imgUrl: "", // 分享图标
+  //   success: function () {
+  //     // 用户点击了分享后执行的回调函数
+  //     console.info("分享到朋友圈");
+  //   },
+  // });
 }
 function afterRead(file) {
   console.log(file);
@@ -443,12 +442,6 @@ onMounted(() => {
             src="../assets/save_btn.png"
             alt=""
             @click="download"
-          />
-          <img
-            class="imgs"
-            src="../assets/share_btn.png"
-            alt=""
-            @click="share"
           />
         </div>
         <img class="bottom" src="../assets/icon/bottom.png" alt="" />

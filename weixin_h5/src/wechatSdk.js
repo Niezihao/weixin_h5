@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-20 00:37:18
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 10:24:52
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-27 11:39:05
  */
 
 // import { wechatConfig } from "@/utils/wechatSdk.js";
@@ -21,14 +21,35 @@
 //     getWechatConfig
 // } from "./common.js";  //为你提供timestamp、nonceStr、signature的后端接口
 import axios from "axios"
+import { buildGetAuthorizationHeader, buildPostAuthorizationHeader } from './signatureHelper'
 
 function getWechatConfig(url) {
-    // axios.get('/ms-sanfu-spi-customer/v1/customer/wechatConfig', {
-    //     headers: {
-    //         Authorization: 'SANFU-OPEN-API appId="30001",nonce="MkgAaoFqSi",timestamp="1612332668",signature="RjBDNUE2Q0Y3NUJGNTY4RkM4QjRENEVBMkEyRDZGN0FBMEI2Nzk4RjAwM0VBMDcwNDU2RDdBQ0IyQ0Y4MTkzNw=="'
+    let wx_host = encodeURIComponent(window.location.href.split('#')[0])
+    // let wx_host = encodeURIComponent(`${location.origin}${location.pathname}${location.search}`)
+    // axios.post(
+    //     "/ms-sanfu-spi-customer/v1/coupon/sendCoupon",
+    //     {
+    //         curCusId: 'XX000846',
+    //         couponId: 'C20240108090001',
+    //     },
+    //     {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: buildPostAuthorizationHeader(
+    //                 "30009",
+    //                 'XX000846',
+    //                 'C20240108090001',
+    //             ),
+    //             // 其他可能的header
+    //         },
     //     }
-    // })
-    return axios.get(`/users/getSignature?url=${url}`)
+    // );
+    return axios.get(`/ms-sanfu-spi-customer/v1/customer/wechatConfig?url=${wx_host}`, {
+        headers: {
+            "Authorization": buildGetAuthorizationHeader('30009')
+        }
+    })
+    // return axios.get(`/users/getSignature?url=${url}`)
 }
 
 
@@ -44,22 +65,31 @@ const APPID = "wx8f6ff2f32f7c93a5"; //公众号的appId
  * @returns 
  */
 export const wechatConfig = (tag, share_title, share_desc, share_link, share_cover) => {
-    // var wx_host = window.location.href.split('#')[0];
-    let wx_host = decodeURIComponent(`${location.origin}${location.pathname}${location.search}`)
+    let wx_host = encodeURIComponent(window.location.href.split('#')[0]);
+    // let wx_host = encodeURIComponent(`${location.origin}${location.pathname}${location.search}`)
     console.log('wx_host', wx_host); //后端获取签名，需要前端传url，url要求看注解
     const cover = share_cover || 'https://hbimg.huaban.com/a2a9a71b293f6664b342e0cefc6e1fccd5f921f83cfa5-RoYLU8_fw658/format/webp'; //不重要的默认图片地址
     return new Promise((resolve, reject) => {
         getWechatConfig(wx_host).then((res) => {
             if (res) {
                 console.log('res', res.data.signature);
+                // const config = {
+                //     debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                //     appId: APPID, // 必填，公众号的唯一标识
+                //     timestamp: res.data.signature.timestamp, // 必填，生成签名的时间戳
+                //     nonceStr: res.data.signature.nonceStr, // 必填，生成签名的随机串
+                //     signature: res.data.signature.signature, // 必填，签名
+                //     jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"], // 必填，需要使用的JS接口列表，注意查看官方文档，部分js接口即将废弃，我这里用的是新的
+                //     // openTagList: ["wx-open-launch-weapp"], // 可选，需要使用的开放标签列表（当前标签用于跳转微信小程序）
+                // };
                 const config = {
                     debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                    appId: APPID, // 必填，公众号的唯一标识
-                    timestamp: res.data.signature.timestamp, // 必填，生成签名的时间戳
-                    nonceStr: res.data.signature.nonceStr, // 必填，生成签名的随机串
-                    signature: res.data.signature.signature, // 必填，签名
+                    appId: res.data.data.appId, // 必填，公众号的唯一标识
+                    timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: res.data.data.noncestr, // 必填，生成签名的随机串
+                    signature: res.data.data.signature, // 必填，签名
                     jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"], // 必填，需要使用的JS接口列表，注意查看官方文档，部分js接口即将废弃，我这里用的是新的
-                    openTagList: ["wx-open-launch-weapp"], // 可选，需要使用的开放标签列表（当前标签用于跳转微信小程序）
+                    // openTagList: ["wx-open-launch-weapp"], // 可选，需要使用的开放标签列表（当前标签用于跳转微信小程序）
                 };
                 tag.$wx.config(config); //通过config接口注入权限验证配置
                 tag.$wx.ready(function () { //通过ready接口处理成功验证
@@ -98,4 +128,3 @@ export const wechatConfig = (tag, share_title, share_desc, share_link, share_cov
         });
     })
 }
-// https://tm.sanfu.com/ms-sanfu-spi-customer/v1/customer/wechatConfig
