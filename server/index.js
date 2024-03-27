@@ -1,8 +1,8 @@
 /*
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-09 20:20:58
- * @LastEditors: niezihao
- * @LastEditTime: 2024-03-25 16:48:22
+ * @LastEditors: Niezihao 1332421989@qq.com
+ * @LastEditTime: 2024-03-26 18:01:58
  * @FilePath: \server\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,14 +32,31 @@ app.get('/getTicket', async (req, res) => {
 // sanfu
 app.get('/getSanfu', async (req, res) => {
     let authorizationHeader = require('./signatureHelperGet')
-    console.log(authorizationHeader("30009"));
-    let url = `https://tm.sanfu.com/ms-sanfu-spi-customer/v1/customer/wechatConfig`
-    let resss = (await axios.get(url, {
-        headers: {
-            Authorization: authorizationHeader("30009"),
-            // 其他可能的header
+    // console.log(authorizationHeader("30009"));
+    // let url = `https://tm.sanfu.com/ms-sanfu-spi-customer/v1/customer/wechatConfig`
+    // let resss = (await axios.get(url, {
+    //     headers: {
+    //         "Authorization": authorizationHeader("30009"),
+    //     },
+    // }))
+    let resss = await axios.post(
+        `https://tm.sanfu.com/ms-sanfu-spi-customer/v1/coupon/sendCoupon?couponId=XX000846&curCusId=C20240108090001`,
+        {
+            couponId: 'C20240108090001',
+            curCusId: 'XX000846',
         },
-    }))
+        {
+            headers: {
+                // "Content-Type": "application/json",
+                "Authorization": authorizationHeader(
+                    "30009",
+                    'XX000846',
+                    'C20240108090001',
+                ),
+                // 其他可能的header
+            },
+        }
+    );
     res.send(resss)
 })
 
