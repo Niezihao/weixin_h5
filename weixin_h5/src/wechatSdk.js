@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-20 00:37:18
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 11:39:05
+ * @LastEditTime: 2024-03-27 14:54:35
  */
 
 // import { wechatConfig } from "@/utils/wechatSdk.js";
@@ -43,7 +43,9 @@ function getWechatConfig(url) {
     //             // 其他可能的header
     //         },
     //     }
-    // );
+    // ).then((res) => {
+    //     console.log(res);
+    // })
     return axios.get(`/ms-sanfu-spi-customer/v1/customer/wechatConfig?url=${wx_host}`, {
         headers: {
             "Authorization": buildGetAuthorizationHeader('30009')

@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 11:36:11
+ * @LastEditTime: 2024-03-27 14:59:22
 -->
 
 <script setup>
@@ -10,6 +10,7 @@ import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import AnimationPlayer from "./components/AnimationPlayer.vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
+import { buildGetAuthorizationHeader1 } from "../signatureHelper";
 
 const { proxy } = getCurrentInstance(); //来获取全局 globalProperties 中配置的信息
 const router = useRouter();
@@ -57,13 +58,36 @@ const userdata = ref({});
 // 后台
 async function login() {
   userdata.value.curCusId = userdata.value.cardid;
+  console.log(userdata.value.curCusId);
   if (userdata.value.curCusId) {
-    const res = await proxy.$axios.post("/users/login", {
-      openId: userdata.value.curCusId,
-    });
-    const userInfo = Object.assign(res, userdata.value);
-    console.log(userInfo);
-    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+    proxy.$axios
+      .post("/users/login", {
+        openId: userdata.value.curCusId,
+      })
+      .then((res) => {
+        const userInfo = Object.assign(res, userdata.value);
+        console.log(userInfo);
+        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+      });
+
+    axios
+      .get(
+        `/ms-sanfu-spi-customer/v1/customer/getCustomerInfo?curCusId=${userdata.value.curCusId}`,
+        {
+          headers: {
+            Authorization: buildGetAuthorizationHeader1(
+              "30009",
+              userdata.value.curCusId
+            ),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data && res.data.code == 200) {
+          let nickName = res.data.data && res.data.data.nickName;
+          sessionStorage.setItem("nickName", nickName);
+        }
+      });
   }
 }
 

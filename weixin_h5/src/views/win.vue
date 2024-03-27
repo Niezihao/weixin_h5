@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-23 17:24:08
+ * @LastEditTime: 2024-03-27 14:01:04
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -12,7 +12,7 @@ import axios from "axios";
 const router = useRouter();
 
 function go() {
-  router.push("/page");
+  router.push("/wirteAddress");
 }
 function goBack() {
   router.push("/giftIndex");

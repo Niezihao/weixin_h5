@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 09:33:35
+ * @LastEditTime: 2024-03-27 14:58:18
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -94,12 +94,8 @@ const picture = computed(() => {
   return picture;
 });
 const name = computed(() => {
-  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-  if (userInfo && userInfo.name) {
-    return userInfo.name;
-  } else {
-    return "";
-  }
+  let nickName = sessionStorage.getItem("nickName");
+  return nickName ? nickName : "";
 });
 
 onMounted(() => {
@@ -153,7 +149,7 @@ onMounted(() => {
     <img v-if="isResImg" class="resImg" id="resImg" alt="" />
 
     <div v-else class="imgBg" id="imgBg">
-      <div class="font1">{{ name ? name : "" }}aa</div>
+      <div class="font1">{{ name ? name : "" }}</div>
       <div class="font2">{{ formattedNow }}</div>
       <div class="font4">{{ formattedNow }}</div>
       <div class="font3">{{ timestamp }}</div>
@@ -255,7 +251,7 @@ onMounted(() => {
   position: absolute;
   width: 50vw;
   top: 6vw;
-  left: 25vw;
+  left: 30vw;
   font-family: "胡晓波骚包体";
 }
 </style>

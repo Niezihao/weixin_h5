@@ -2,13 +2,14 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 11:42:05
+ * @LastEditTime: 2024-03-27 14:12:36
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { buildPostAuthorizationHeader } from "../signatureHelper";
+import { showSuccessToast, showFailToast } from "vant";
 
 const { proxy } = getCurrentInstance();
 const router = useRouter();
@@ -31,28 +32,39 @@ function goBack() {
 function putWin() {
   let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
   if (userInfo && userInfo.curCusId) {
-    axios.put("users/profile/update", {
-      openId: userInfo.curCusId,
-      prize: "coupon",
-    });
-    axios.post(
-      "/ms-sanfu-spi-customer/v1/coupon/sendCoupon",
-      {
-        curCusId: userInfo.curCusId,
-        couponId: "C20240314160000",
-        shoId: userInfo.shoId,
-      },
-      {
+    const params = userInfo.dshoIdWx
+      ? {
+          curCusId: userInfo.curCusId,
+          couponId: "C20240314160000",
+          shoId: userInfo.dshoIdWx,
+        }
+      : {
+          curCusId: userInfo.curCusId,
+          couponId: "C20240314160000",
+          shoId: "110",
+        };
+    axios
+      .post("/ms-sanfu-spi-customer/v1/coupon/sendCoupon", params, {
         headers: {
           "Content-Type": "application/json",
           Authorization: buildPostAuthorizationHeader(
             "30009",
-            userInfo.curCusId
+            userInfo.curCusId,
+            userInfo.dshoIdWx
           ),
           // 其他可能的header
         },
-      }
-    );
+      })
+      .then((res) => {
+        if (res.data.code == 200) {
+          axios.put("users/profile/update", {
+            openId: userInfo.curCusId,
+            prize: "coupon",
+          });
+        } else {
+          showFailToast(res.data && res.data.msg);
+        }
+      });
   }
 }
 onMounted(() => {

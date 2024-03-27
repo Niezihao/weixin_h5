@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 09:46:55
+ * @LastEditTime: 2024-03-27 14:21:02
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -19,6 +19,11 @@ function goGift() {
 async function lottery() {
   if (prize.value) {
     showFailToast("已抽取礼品，不能重复抽取");
+    return;
+  }
+  let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  if (!userInfo || !userInfo.curCusId) {
+    showFailToast("没有抽奖权限");
     return;
   }
   const res = await axios.get("users/box-number");
@@ -63,14 +68,23 @@ function getUserInfo() {
 }
 function goMiniProgram() {
   // 小程序跳转方法
-  proxy.$wx.miniProgram.navigateBack({
-    delta: 1,
-    fail: () => {
-      wx.miniProgram.switchTab({
-        url: "/pages/index/index",
-      });
-    },
+  // proxy.$wx.miniProgram.switchTab({
+  //   // url: "../index/index",
+  //   url: "/pages/h5/h5",
+  // });
+  // proxy.$wx.miniProgram.navigateBack({
+  //   delta: 1,
+  //   success: () => {
+  //     console.log("success");
+  //   },
+  //   fail: () => {
+  //     console.log("fail");
+  proxy.$wx.miniProgram.switchTab({
+    url: "../index/index",
+    // url: "/pages/index/index",
   });
+  // }
+  // });
   // proxy.$wx.miniProgram.navigateTo({
   //   url: "../index/index", // 指定跳转至小程序页面的路径
   //   success: (res) => {
@@ -167,7 +181,7 @@ onMounted(() => {
   position: absolute;
   width: 50vw;
   top: 10vw;
-  left: 25vw;
+  left: 30vw;
   font-family: "胡晓波骚包体";
 }
 </style>
