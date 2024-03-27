@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 14:04:23
+ * @LastEditTime: 2024-03-27 15:12:52
 -->
 <script>
 export default {
@@ -48,28 +48,12 @@ const prize = computed(() => {
 
 function goMiniProgram() {
   // 小程序跳转方法
-  // proxy.$wx.miniProgram.navigateBack({
-  //   delta: 1,
-  //   fail: () => {
   proxy.$wx.miniProgram.switchTab({
     url: "/pages/index/index",
   });
-  //   },
-  // });
-  // proxy.$wx.miniProgram.navigateTo({
-  //   url: "../index/index", // 指定跳转至小程序页面的路径
-  //   success: (res) => {
-  //     console.log(res); // 页面跳转成功的回调函数
-  //   },
-  //   fail: (err) => {
-  //     console.log(err); // 页面跳转失败的回调函数
-  //   },
-  // });
 }
 function goGift() {
   // 小程序跳转方法
-  // proxy.$wx.miniProgram.navigateBack()({});
-
   proxy.$wx.miniProgram.navigateTo({
     url: "../couponcenter/index/index", // 指定跳转至小程序页面的路径
     success: (res) => {

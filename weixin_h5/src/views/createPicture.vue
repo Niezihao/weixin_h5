@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 09:30:34
+ * @LastEditTime: 2024-03-27 15:15:32
 -->
 <script setup>
 import {
@@ -16,7 +16,6 @@ import {
 import { useRouter } from "vue-router";
 import { showSuccessToast, showFailToast } from "vant";
 import { fabric } from "fabric";
-import Hammer from "hammerjs";
 import sucai1 from "../assets/sucai/风格1-1.png";
 import sucai2 from "../assets/sucai/风格1-2.png";
 import sucai3 from "../assets/sucai/风格1-3.png";
@@ -98,16 +97,6 @@ function setBg() {
   }
   timer = setTimeout(() => {
     nextTick(() => {
-      // let img = document.getElementById("bg");
-      // console.log(img);
-      // new fabric.Image(img, {
-      //   top: 0,
-      //   left: 0,
-      //   width: canvasHeight,
-      //   height: canvasWidth,
-      //   scaleX: 0.2,
-      //   scaleY: 0.2,
-      // });
       bgC.value = fabric.Image.fromURL(bgImg.value, (img) => {
         img.selectable = false;
         var scaleX = editorCanvas.getWidth() / img.width;
@@ -154,18 +143,6 @@ function setSucai(index) {
     sucaiList.value[index].isSelect = true;
   }, 200);
   console.log(editorCanvas.getObjects());
-}
-
-function deleteImg(index) {
-  sucaiList.value[index].isSelect = false;
-  imgLsit.forEach((item) => {
-    console.log(item.val);
-    console.log(index);
-    if (item.val === index) {
-      editorCanvas.remove(item.img);
-    }
-  });
-  // imgLsit.splice(1, index);
 }
 
 function initCanvas() {
@@ -251,6 +228,7 @@ function download() {
     format: "png",
   });
   sessionStorage.setItem("picture", dataURL);
+  // 下载
   // const link = document.createElement("a");
   // link.download = "星球通行证.png";
   // link.href = dataURL;
@@ -260,26 +238,6 @@ function download() {
   router.push("/savePicture");
 }
 
-function share() {
-  let wx_host = `${location.origin}${location.pathname}${location.search}`;
-  // proxy.$wx.miniProgram.postMessage({
-  //   data: {
-  //     title: "aa", // 标题
-  //     desc: "ddd", // 描述
-  //     imgUrl: "", // 图片
-  //     link: "", // 链接
-  //   },
-  // });
-  // proxy.$wx.updateTimelineShareData({
-  //   title: "默认标题", // 分享标题
-  //   link: `${wx_host}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-  //   imgUrl: "", // 分享图标
-  //   success: function () {
-  //     // 用户点击了分享后执行的回调函数
-  //     console.info("分享到朋友圈");
-  //   },
-  // });
-}
 function afterRead(file) {
   console.log(file);
   file.status = "uploading";
@@ -318,19 +276,6 @@ function afterRead(file) {
             img.top = -(realHeight - canvasHeight) / 2;
             img.left = 0;
           }
-          // } else {
-          //   if (realHeight < canvasHeight) {}else{
-          //   }
-          // }
-          // var scaleX = editorCanvas.getWidth() / img.width;
-          // var scaleY = editorCanvas.getHeight() / img.height;
-          // img.set({
-          //   // 通过scale来设置图片大小，这里设置和画布一样大
-          //   scaleX: scaleX,
-          //   scaleY: scaleY,
-          //   originX: "left",
-          //   originY: "top",
-          // });
         } else {
           img.scaleToHeight(canvasHeight);
           img.top = 0;

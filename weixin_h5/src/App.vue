@@ -11,7 +11,6 @@ import { ref, onMounted, watch, getCurrentInstance } from "vue";
 import { RouterView } from "vue-router";
 import GlobalAudio from "./views/GlobalAudio.vue";
 import { useStore } from "vuex";
-import axios from "axios";
 import { wechatConfig } from "./wechatSdk.js";
 import sound from "./assets/麻烦星球 音乐loop - 2 -.wav";
 
@@ -26,21 +25,16 @@ watch(
     // 对新的播放状态进行相应处理
 
     if (newPlayingStatus) {
-      console.log(store.state.count);
       store.state.count > 0 ? musicPlay(true) : autoPlayMusic();
     } else {
       musicPlay(false);
     }
-
-    // globalAudio.value.play();
   }
 );
 
 function autoPlayMusic() {
-  console.log("musicPlay");
   // 自动播放音乐效果，解决浏览器或者APP自动播放问题
   function musicInBrowserHandler() {
-    console.log("musicPlay");
     musicPlay(true);
     document.body.removeEventListener("touchstart", musicInBrowserHandler);
   }
@@ -53,7 +47,6 @@ function autoPlayMusic() {
     document.addEventListener(
       "WeixinJSBridgeReady",
       function () {
-        console.log("musicPlay");
         musicPlay(true);
       },
       false
@@ -63,18 +56,11 @@ function autoPlayMusic() {
   document.addEventListener("DOMContentLoaded", musicInWeixinHandler);
 }
 function musicPlay(isPlay) {
-  // var media = document.querySelector("#bg-music");
-
   if (isPlay && globalAudio.value) {
-    console.log("musicPlay");
-    // audio.loop = true;
     audio.play();
-
-    // globalAudio.value.play();
   }
   if (!isPlay) {
     audio.pause();
-    // globalAudio.value.pause();
   }
 }
 
@@ -85,11 +71,7 @@ onMounted(async () => {
     "分享描述",
     "分享链接",
     "分享封面（配图）"
-  ).then((res) => {
-    //需要获取方法执行结果，可以加.then这一段；
-    //不需要可以不加
-  });
-  // loadImg(imgList);
+  ).then((res) => {});
 });
 </script>
 

@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 22:20:30
+ * @LastEditTime: 2024-03-27 15:12:29
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -51,7 +51,6 @@ onMounted(() => {});
         @click="open"
       />
       <div class="main"></div>
-      <!-- <van-button class="btn" @click="go">生成通行证</van-button> -->
       <img @click="go" class="btn" src="../assets/goTongxinzheng.png" alt="" />
       <img
         @click="toMyGift"

@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 14:59:22
+ * @LastEditTime: 2024-03-27 15:14:17
 -->
 
 <script setup>
@@ -15,45 +15,7 @@ import { buildGetAuthorizationHeader1 } from "../signatureHelper";
 const { proxy } = getCurrentInstance(); //来获取全局 globalProperties 中配置的信息
 const router = useRouter();
 const route = useRouter();
-const headimgurl = ref("");
-const nickname = ref("");
 const userdata = ref({});
-
-// 微信授权
-// async function getCode() {
-//   const res = await proxy.$axios.get("/getCode");
-//   if (res) {
-//     window.location.href = res;
-//   }
-// }
-// async function getUserInfo() {
-//   const url_params = Object.fromEntries(
-//     window.location.search
-//       .slice(1)
-//       .split("&")
-//       .map((i) => i.split("="))
-//   );
-//   // console.log(url_params.code);
-//   const res = await proxy.$axios.post("/getUserInfo", {
-//     code: url_params.code,
-//   });
-//   if (res) {
-//     localStorage.setItem("userInfo", JSON.stringify(res));
-//     headimgurl.value = res.headimgurl;
-//     nickname.value = res;
-//   }
-// }
-// function isCode() {
-//   return window.location.search.includes("code=");
-// }
-
-// function toLogin() {
-//   if (isCode()) {
-//     getUserInfo();
-//   } else {
-//     getCode();
-//   }
-// }
 
 // 后台
 async function login() {
@@ -132,15 +94,7 @@ function getQueryParamsAsObject(url) {
   return queryParams;
 }
 
-// 使用示例
-const url = "https://example.com/?name=John&age=30";
-const paramsObject = getQueryParamsAsObject(url);
-console.log(paramsObject); // 输出：{ name: "John", age: "30" }
-
 onMounted(() => {
-  console.log("onMounted");
-  console.log(isWeixin.value);
-  // toLogin();
   userdata.value = getQueryParamsAsObject();
   login();
   axios.put("/log/update");

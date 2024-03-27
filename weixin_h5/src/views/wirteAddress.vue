@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-24 10:36:17
+ * @LastEditTime: 2024-03-27 15:11:36
 -->
 <script setup>
 import { ref, onMounted, getCurrentInstance, computed } from "vue";
@@ -51,14 +51,6 @@ onMounted(() => {});
     <div class="main"></div>
     <div class="address">
       <div class="title">收货地址</div>
-      <!-- <div>
-        <div>您的姓名</div>
-        <div><input type="text" placeholder="收货人姓名" /></div>
-        <div>手机号码</div>
-        <div><input type="text" placeholder="收货人联系方式" /></div>
-        <div>所在地区</div>
-        <div>详细地址</div>
-      </div> -->
       <van-address-edit
         :area-list="areaList"
         :search-result="searchResult"
