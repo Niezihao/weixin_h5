@@ -2,15 +2,11 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-18 23:09:27
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-27 15:14:42
+ * @LastEditTime: 2024-03-28 01:18:39
 -->
 <template>
   <div>
-    <audio
-      ref="audioRef"
-      src="../assets/麻烦星球 音乐loop - 2 -.wav"
-      loop
-    ></audio>
+    <audio ref="audioRef" src="../assets/麻烦星球 音乐.wav" loop></audio>
   </div>
 </template>
 

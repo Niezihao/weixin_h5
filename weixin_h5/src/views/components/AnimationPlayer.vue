@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-26 20:15:59
+ * @LastEditTime: 2024-03-27 22:47:00
 -->
 <script setup>
 import { ref, onMounted } from "vue";
@@ -24,15 +24,15 @@ const router = useRouter();
 
 function play() {
   if (index.value !== 0) return;
-  index.value = 1;
-  const timer = setInterval(() => {
-    if (index.value > 3) {
-      clearInterval(timer);
-      router.push("/page");
-    } else {
-      index.value++;
-    }
-  }, 3000);
+  router.push("Animation1");
+  // const timer = setInterval(() => {
+  //   if (index.value > 3) {
+  //     clearInterval(timer);
+  //     router.push("/page");
+  //   } else {
+  //     index.value++;
+  //   }
+  // }, 3000);
 }
 function close() {
   isMusic.value = true;
@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main style="position: relative">
+  <main class="main" style="position: relative" @click.once="play">
     <img
       v-if="!isMusic"
       class="music"
@@ -65,7 +65,11 @@ onMounted(() => {
       alt=""
       @click="open"
     />
-    <img class="img" :src="imgLsit[index]" alt="Image" @click.once="play" />
+    <img
+      class="img animate__animated animate__bounce"
+      src="../../assets/animation/a/星球.png"
+      alt="Image"
+    />
   </main>
 </template>
 
@@ -76,10 +80,18 @@ onMounted(() => {
   top: 2vh;
   left: 5vw;
 }
-.img {
+.main {
   width: 100vw;
   height: 100vh;
+  background: url("../../assets/animation/a/1登录页.png");
   background-repeat: round;
   background-size: 100vw 100vh;
+}
+.img {
+  position: absolute;
+  top: 50vh;
+  width: 60vw;
+  left: 20vw;
+  --animate-duration: 2s;
 }
 </style>

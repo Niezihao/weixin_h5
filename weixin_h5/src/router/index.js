@@ -2,7 +2,7 @@
  * @Author: Niezihao 1332421989@qq.com
  * @Date: 2024-03-10 00:26:03
  * @LastEditors: Niezihao 1332421989@qq.com
- * @LastEditTime: 2024-03-21 00:25:07
+ * @LastEditTime: 2024-03-27 16:51:56
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index.vue'
@@ -54,7 +54,27 @@ const router = createRouter({
       path: '/savePicture',
       name: 'savePicture',
       component: () => import('../views/savePicture.vue')
-    }
+    },
+    {
+      path: '/Animation1',
+      name: 'Animation1',
+      component: () => import('../views/components/Animation1.vue')
+    },
+    {
+      path: '/Animation2',
+      name: 'Animation2',
+      component: () => import('../views/components/Animation2.vue')
+    },
+    {
+      path: '/Animation3',
+      name: 'Animation3',
+      component: () => import('../views/components/Animation3.vue')
+    },
+    {
+      path: '/Animation4',
+      name: 'Animation4',
+      component: () => import('../views/components/Animation4.vue')
+    },
   ]
 })
 
